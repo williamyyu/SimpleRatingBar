@@ -44,22 +44,16 @@ abstract class BaseRatingBar extends LinearLayout {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RatingBarAttributes);
         for (int i = 0; i < typedArray.getIndexCount(); i++) {
             int attr = typedArray.getIndex(i);
-            switch (attr) {
-                case R.styleable.RatingBarAttributes_numStars:
-                    mNumStars = typedArray.getInt(attr, 5);
-                    break;
-                case R.styleable.RatingBarAttributes_starPadding:
-                    mPadding = typedArray.getInt(attr, 20);
-                    break;
-                case R.styleable.RatingBarAttributes_rating:
-                    mRating = typedArray.getInt(attr, 0);
-                    break;
-                case R.styleable.RatingBarAttributes_drawableEmpty:
-                    mEmptyDrawable = typedArray.getDrawable(attr);
-                    break;
-                case R.styleable.RatingBarAttributes_drawableFilled:
-                    mFilledDrawable = typedArray.getDrawable(attr);
-                    break;
+            if (attr == R.styleable.RatingBarAttributes_numStars) {
+                mNumStars = typedArray.getInt(attr, 5);
+            } else if (attr == R.styleable.RatingBarAttributes_starPadding) {
+                mPadding = typedArray.getInt(attr, 20);
+            } else if (attr == R.styleable.RatingBarAttributes_rating) {
+                mRating = typedArray.getInt(attr, 0);
+            } else if (attr == R.styleable.RatingBarAttributes_drawableEmpty) {
+                mEmptyDrawable = typedArray.getDrawable(attr);
+            } else if (attr == R.styleable.RatingBarAttributes_drawableFilled) {
+                mFilledDrawable = typedArray.getDrawable(attr);
             }
         }
         typedArray.recycle();
