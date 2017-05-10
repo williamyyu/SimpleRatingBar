@@ -188,10 +188,22 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     @Override
     public void setEmptyDrawable(Drawable drawable) {
         mEmptyDrawable = drawable;
+
+        for (final ImageView view : mRatingViewStatus.keySet()) {
+            if (!mRatingViewStatus.get(view)) {
+                view.setImageDrawable(drawable);
+            }
+        }
     }
 
     @Override
     public void setFilledDrawable(Drawable drawable) {
         mFilledDrawable = drawable;
+
+        for (final ImageView view : mRatingViewStatus.keySet()) {
+            if (mRatingViewStatus.get(view)) {
+                view.setImageDrawable(drawable);
+            }
+        }
     }
 }

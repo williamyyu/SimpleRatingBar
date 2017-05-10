@@ -32,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
 //                ratingBarXML.setRating(currentRating + 1);
 //
 //                ratingBarCode.setNumStars(3);
-                ratingBarXML.setNumStars(ratingBarXML.getNumStars() - 1);
+//                ratingBarXML.setNumStars(ratingBarXML.getNumStars() - 1);
 //                ratingBarXML.setStarPadding(5);
+                ratingBarXML.setFilledDrawable(getResources().getDrawable(R.drawable.star_filled));
             }
         });
     }
