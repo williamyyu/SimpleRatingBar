@@ -60,7 +60,6 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             mFilledDrawable = getResources().getDrawable(R.drawable.star_filled);
         }
 
-        setRating(mRating);
         initRatingView();
     }
 
@@ -78,6 +77,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             }
             addView(ratingView);
         }
+
+        setRating(mRating);
     }
 
     private ImageView getRatingView(final int ratingViewId, Drawable drawable) {
@@ -91,7 +92,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 int rating = v.getId();
 
                 if (mRating == rating) {
-                    clearRatingBar();
+                    clearRating();
                     return;
                 }
 
@@ -101,7 +102,12 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         return imageView;
     }
 
-    protected void clearRatingBar() {
+    private void removeAllRatingViews() {
+        mRatingViewStatus.clear();
+        removeAllViews();
+    }
+
+    protected void clearRating() {
         mRating = 0;
 
         if (mRatingViewStatus.size() <= 0) {
@@ -113,7 +119,6 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             mRatingViewStatus.put(view, false);
         }
     }
-
 
     protected void fillRatingBar(final int rating) {
         for (final ImageView view : mRatingViewStatus.keySet()) {
@@ -133,7 +138,9 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             return;
         }
 
+        removeAllRatingViews();
         mNumStars = numStars;
+        initRatingView();
     }
 
     @Override
@@ -143,16 +150,16 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     @Override
     public void setRating(int rating) {
-        if (mRating == rating) {
-            return;
-        }
-
         if (rating > mNumStars) {
             rating = mNumStars;
         }
 
         if (rating < 0) {
             rating = 0;
+        }
+
+        if (mRating == rating) {
+            return;
         }
 
         mRating = rating;
@@ -167,6 +174,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     @Override
     public void setStarPadding(int ratingPadding) {
         mPadding = ratingPadding;
+
+        for (final ImageView view : mRatingViewStatus.keySet()) {
+            view.setPadding(mPadding, mPadding, mPadding, mPadding);
+        }
     }
 
     @Override

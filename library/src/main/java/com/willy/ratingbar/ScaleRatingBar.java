@@ -29,7 +29,7 @@ public class ScaleRatingBar extends BaseRatingBar {
     }
 
     @Override
-    protected void clearRatingBar() {
+    protected void clearRating() {
         mRating = 0;
 
         if (mRatingViewStatus.size() <= 0) {

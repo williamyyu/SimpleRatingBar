@@ -28,10 +28,12 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currentRating = ratingBarXML.getRating();
-                ratingBarXML.setRating(currentRating + 1);
-
-                ratingBarCode.setNumStars(3);
+//                int currentRating = ratingBarXML.getRating();
+//                ratingBarXML.setRating(currentRating + 1);
+//
+//                ratingBarCode.setNumStars(3);
+                ratingBarXML.setNumStars(ratingBarXML.getNumStars() - 1);
+//                ratingBarXML.setStarPadding(5);
             }
         });
     }
