@@ -7,9 +7,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.willy.ratingbar.MainActivity">
+    tools:context="com.willy.example.MainActivity">
 
-    <com.willy.ratingbar.SimpleRatingBar
+    <com.willy.ratingbar.ScaleRatingBar
         android:id="@+id/simpleRatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,10 +19,10 @@
         app:layout_constraintTop_toTopOf="parent"
         rb:drawableEmpty="@drawable/empty"
         rb:drawableFilled="@drawable/filled">
-    </com.willy.ratingbar.SimpleRatingBar>
+    </com.willy.ratingbar.ScaleRatingBar>
 
-    <com.willy.ratingbar.SimpleRatingBar
-        android:id="@+id/simpleRatingBar2"
+    <com.willy.ratingbar.BaseRatingBar
+        android:id="@+id/baseRatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,7 +33,7 @@
         rb:numStars="10"
         rb:rating="5"
         rb:starPadding="5">
-    </com.willy.ratingbar.SimpleRatingBar>
+    </com.willy.ratingbar.BaseRatingBar>
 
     <Button
         android:id="@+id/button"

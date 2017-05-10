@@ -5,9 +5,8 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RatingBar;
 
-import com.willy.ratingbar.SimpleRatingBar;
+import com.willy.ratingbar.ScaleRatingBar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,24 +17,21 @@ public class MainActivity extends AppCompatActivity {
 
         ConstraintLayout constraintLayout = (ConstraintLayout) findViewById(R.id.layout);
 
-        final SimpleRatingBar ratingBar = (SimpleRatingBar) findViewById(R.id.simpleRatingBar);
+        final ScaleRatingBar ratingBarXML = (ScaleRatingBar) findViewById(R.id.simpleRatingBar);
 
-        final RatingBar ratingBar1 = new RatingBar(this);
-        ratingBar1.setNumStars(8);
-
-        SimpleRatingBar ratingBar2 = new SimpleRatingBar(this);
-        ratingBar2.setNumStars(8);
-        ratingBar2.setRating(2);
-        constraintLayout.addView(ratingBar1);
+        final ScaleRatingBar ratingBarCode = new ScaleRatingBar(this);
+        ratingBarCode.setNumStars(8);
+        ratingBarCode.setRating(2);
+//        constraintLayout.addView(ratingBarCode);
 
         Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currentRating = ratingBar.getRating();
-                ratingBar.setRating(currentRating + 1);
+                int currentRating = ratingBarXML.getRating();
+                ratingBarXML.setRating(currentRating + 1);
 
-                ratingBar1.setNumStars(3);
+                ratingBarCode.setNumStars(3);
             }
         });
     }

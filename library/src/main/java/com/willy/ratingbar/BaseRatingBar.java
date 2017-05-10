@@ -5,16 +5,18 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * Created by willy on 2017/5/5.
  */
 
-abstract class BaseRatingBar extends LinearLayout {
+public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     protected int mNumStars = 5;
     protected int mRating = 0;
@@ -41,27 +43,15 @@ abstract class BaseRatingBar extends LinearLayout {
      */
     public BaseRatingBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RatingBarAttributes);
-        for (int i = 0; i < typedArray.getIndexCount(); i++) {
-            int attr = typedArray.getIndex(i);
-            if (attr == R.styleable.RatingBarAttributes_numStars) {
-                mNumStars = typedArray.getInt(attr, 5);
-            } else if (attr == R.styleable.RatingBarAttributes_starPadding) {
-                mPadding = typedArray.getInt(attr, 20);
-            } else if (attr == R.styleable.RatingBarAttributes_rating) {
-                mRating = typedArray.getInt(attr, 0);
-            } else if (attr == R.styleable.RatingBarAttributes_drawableEmpty) {
-                mEmptyDrawable = typedArray.getDrawable(attr);
-            } else if (attr == R.styleable.RatingBarAttributes_drawableFilled) {
-                mFilledDrawable = typedArray.getDrawable(attr);
-            }
-        }
+        mNumStars = typedArray.getInt(R.styleable.RatingBarAttributes_numStars, mNumStars);
+        mPadding = typedArray.getInt(R.styleable.RatingBarAttributes_starPadding, mPadding);
+        mRating = typedArray.getInt(R.styleable.RatingBarAttributes_rating, mRating);
+        mEmptyDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableEmpty);
+        mFilledDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableFilled);
         typedArray.recycle();
 
-        init();
-    }
-
-    protected void init() {
         if (mEmptyDrawable == null) {
             mEmptyDrawable = getResources().getDrawable(R.drawable.start_empty);
         }
@@ -70,13 +60,74 @@ abstract class BaseRatingBar extends LinearLayout {
             mFilledDrawable = getResources().getDrawable(R.drawable.star_filled);
         }
 
-        if (mRating > mNumStars) {
-            mRating = mNumStars;
+        setRating(mRating);
+        initRatingView();
+    }
+
+    private void initRatingView() {
+        mRatingViewStatus = new LinkedHashMap<>();
+
+        for (int i = 1; i <= mNumStars; i++) {
+            ImageView ratingView;
+            if (i <= mRating) {
+                ratingView = getRatingView(i, mFilledDrawable);
+                mRatingViewStatus.put(ratingView, true);
+            } else {
+                ratingView = getRatingView(i, mEmptyDrawable);
+                mRatingViewStatus.put(ratingView, false);
+            }
+            addView(ratingView);
         }
     }
 
-    abstract void fillRatingBar(int rating);
+    private ImageView getRatingView(final int ratingViewId, Drawable drawable) {
+        ImageView imageView = new ImageView(getContext());
+        imageView.setId(ratingViewId);
+        imageView.setPadding(mPadding, mPadding, mPadding, mPadding);
+        imageView.setImageDrawable(drawable);
+        imageView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int rating = v.getId();
 
+                if (mRating == rating) {
+                    clearRatingBar();
+                    return;
+                }
+
+                setRating(rating);
+            }
+        });
+        return imageView;
+    }
+
+    protected void clearRatingBar() {
+        mRating = 0;
+
+        if (mRatingViewStatus.size() <= 0) {
+            return;
+        }
+
+        for (final ImageView view : mRatingViewStatus.keySet()) {
+            view.setImageDrawable(mEmptyDrawable);
+            mRatingViewStatus.put(view, false);
+        }
+    }
+
+
+    protected void fillRatingBar(final int rating) {
+        for (final ImageView view : mRatingViewStatus.keySet()) {
+            if (view.getId() <= rating) {
+                view.setImageDrawable(mFilledDrawable);
+                mRatingViewStatus.put(view, true);
+            } else {
+                view.setImageDrawable(mEmptyDrawable);
+                mRatingViewStatus.put(view, false);
+            }
+        }
+    }
+
+    @Override
     public void setNumStars(int numStars) {
         if (numStars <= 0) {
             return;
@@ -85,7 +136,17 @@ abstract class BaseRatingBar extends LinearLayout {
         mNumStars = numStars;
     }
 
+    @Override
+    public int getNumStars() {
+        return mNumStars;
+    }
+
+    @Override
     public void setRating(int rating) {
+        if (mRating == rating) {
+            return;
+        }
+
         if (rating > mNumStars) {
             rating = mNumStars;
         }
@@ -94,28 +155,32 @@ abstract class BaseRatingBar extends LinearLayout {
             rating = 0;
         }
 
-        if (mRating == rating) {
-            return;
-        }
-
         mRating = rating;
         fillRatingBar(rating);
     }
 
+    @Override
     public int getRating() {
         return mRating;
     }
 
-    public void setRatingPadding(int ratingPadding) {
+    @Override
+    public void setStarPadding(int ratingPadding) {
         mPadding = ratingPadding;
     }
 
+    @Override
+    public int getStarPadding() {
+        return mPadding;
+    }
+
+    @Override
     public void setEmptyDrawable(Drawable drawable) {
         mEmptyDrawable = drawable;
     }
 
-    public void setFilledDrawableId(Drawable drawable) {
+    @Override
+    public void setFilledDrawable(Drawable drawable) {
         mFilledDrawable = drawable;
     }
-
 }
