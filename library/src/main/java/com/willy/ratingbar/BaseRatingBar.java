@@ -53,11 +53,11 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         typedArray.recycle();
 
         if (mEmptyDrawable == null) {
-            mEmptyDrawable = getResources().getDrawable(R.drawable.start_empty);
+            mEmptyDrawable = getResources().getDrawable(R.drawable.empty);
         }
 
         if (mFilledDrawable == null) {
-            mFilledDrawable = getResources().getDrawable(R.drawable.star_filled);
+            mFilledDrawable = getResources().getDrawable(R.drawable.filled);
         }
 
         initRatingView();
