@@ -32,10 +32,6 @@ public class ScaleRatingBar extends BaseRatingBar {
     protected void clearRating() {
         mRating = 0;
 
-        if (mRatingViewStatus.size() <= 0) {
-            return;
-        }
-
         int delay = 0;
         for (final ImageView view : mRatingViewStatus.keySet()) {
             new Handler().postDelayed(new Runnable() {
