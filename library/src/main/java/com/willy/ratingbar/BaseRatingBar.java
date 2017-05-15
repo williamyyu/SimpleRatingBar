@@ -18,12 +18,20 @@ import java.util.Map;
 
 public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
+    public interface OnRatingChangeListener {
+        void onRatingChange(BaseRatingBar ratingBar, int rating);
+    }
+
+    public static final String TAG = "SimpleRatingBar";
+
     protected int mNumStars = 5;
     protected int mRating = 0;
     protected int mPadding = 20;
 
     protected Drawable mEmptyDrawable;
     protected Drawable mFilledDrawable;
+
+    private OnRatingChangeListener mOnRatingChangeListener;
 
     protected Map<ImageView, Boolean> mRatingViewStatus;
 
@@ -111,12 +119,19 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         removeAllViews();
     }
 
+    private void clearRating() {
+        mRating = 0;
+        if (mOnRatingChangeListener != null) {
+            mOnRatingChangeListener.onRatingChange(BaseRatingBar.this, 0);
+        }
+        emptyRatingBar();
+    }
 
     /**
      * Retain this method to let other RatingBar can custom their decrease animation.
      */
-    protected void clearRating() {
-        setRating(0);
+    protected void emptyRatingBar() {
+        fillRatingBar(0);
     }
 
     protected void fillRatingBar(final int rating) {
@@ -149,6 +164,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     @Override
     public void setRating(int rating) {
+        if (!hasRatingViews()) {
+            return;
+        }
+
         if (rating > mNumStars) {
             rating = mNumStars;
         }
@@ -163,8 +182,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
         mRating = rating;
 
-        if (!hasRatingViews()) {
-            return;
+        if (mOnRatingChangeListener != null) {
+            mOnRatingChangeListener.onRatingChange(this, mRating);
         }
 
         fillRatingBar(rating);
@@ -225,5 +244,9 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     protected boolean hasRatingViews() {
         return mRatingViewStatus != null && mRatingViewStatus.size() > 0;
+    }
+
+    public void setOnRatingChangeListener(OnRatingChangeListener onRatingChangeListener) {
+        mOnRatingChangeListener = onRatingChangeListener;
     }
 }
