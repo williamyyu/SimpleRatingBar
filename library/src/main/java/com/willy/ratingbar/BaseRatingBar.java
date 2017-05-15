@@ -3,6 +3,8 @@ package com.willy.ratingbar;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -196,11 +198,15 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     @Override
     public void setStarPadding(int ratingPadding) {
-        mPadding = ratingPadding;
+        if (ratingPadding < 0) {
+            return;
+        }
 
         if (!hasRatingViews()) {
             return;
         }
+
+        mPadding = ratingPadding;
 
         for (final ImageView view : mRatingViewStatus.keySet()) {
             view.setPadding(mPadding, mPadding, mPadding, mPadding);
@@ -228,6 +234,15 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     @Override
+    public void setEmptyDrawableRes(@DrawableRes int res) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setEmptyDrawable(getContext().getDrawable(res));
+        } else {
+            setEmptyDrawable(getContext().getResources().getDrawable(res));
+        }
+    }
+
+    @Override
     public void setFilledDrawable(Drawable drawable) {
         mFilledDrawable = drawable;
 
@@ -239,6 +254,15 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             if (mRatingViewStatus.get(view)) {
                 view.setImageDrawable(drawable);
             }
+        }
+    }
+
+    @Override
+    public void setFilledDrawableRes(@DrawableRes int res) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setFilledDrawable(getContext().getDrawable(res));
+        } else {
+            setFilledDrawable(getContext().getResources().getDrawable(res));
         }
     }
 
