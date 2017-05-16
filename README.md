@@ -1,5 +1,5 @@
 # SimpleRatingBar
-[![Release](https://jitpack.io/v/jitpack/maven-simple.svg)](https://jitpack.io/#ome450901/SimpleRatingBar)  
+[![JitPack](https://jitpack.io/v/ome450901/SimpleRatingBar.svg)](https://jitpack.io/#ome450901/SimpleRatingBar)
 
 There are two RatingBars provided:
 1. BaseRatingBar 
@@ -8,7 +8,8 @@ A RatingBar without any animation.
 A RatingBar with progressive and scale animation.
 
 ## Demo
-![](images/RatingBarExample.gif)
+![](images/demo.gif)  
+Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
 ## Feature
 - Scale animation
@@ -28,7 +29,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:0.8.2'
+    compile 'com.github.ome450901:SimpleRatingBar:1.0'
 }
 ```
 
