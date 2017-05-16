@@ -14,8 +14,6 @@ import android.widget.ImageView;
 
 public class ScaleRatingBar extends BaseRatingBar {
 
-    public static final String TAG = "SimpleRatingBar";
-
     public ScaleRatingBar(Context context) {
         super(context);
     }
@@ -29,13 +27,7 @@ public class ScaleRatingBar extends BaseRatingBar {
     }
 
     @Override
-    protected void clearRating() {
-        mRating = 0;
-
-        if (mRatingViewStatus.size() <= 0) {
-            return;
-        }
-
+    protected void emptyRatingBar() {
         int delay = 0;
         for (final ImageView view : mRatingViewStatus.keySet()) {
             new Handler().postDelayed(new Runnable() {

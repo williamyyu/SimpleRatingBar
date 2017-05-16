@@ -18,12 +18,20 @@ import java.util.Map;
 
 public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
+    public interface OnRatingChangeListener {
+        void onRatingChange(BaseRatingBar ratingBar, int rating);
+    }
+
+    public static final String TAG = "SimpleRatingBar";
+
     protected int mNumStars = 5;
     protected int mRating = 0;
     protected int mPadding = 20;
 
     protected Drawable mEmptyDrawable;
     protected Drawable mFilledDrawable;
+
+    private OnRatingChangeListener mOnRatingChangeListener;
 
     protected Map<ImageView, Boolean> mRatingViewStatus;
 
@@ -91,6 +99,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             public void onClick(View v) {
                 int rating = v.getId();
 
+                if (!hasRatingViews()) {
+                    return;
+                }
+
                 if (mRating == rating) {
                     clearRating();
                     return;
@@ -107,17 +119,19 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         removeAllViews();
     }
 
-    protected void clearRating() {
+    private void clearRating() {
         mRating = 0;
-
-        if (mRatingViewStatus.size() <= 0) {
-            return;
+        if (mOnRatingChangeListener != null) {
+            mOnRatingChangeListener.onRatingChange(BaseRatingBar.this, 0);
         }
+        emptyRatingBar();
+    }
 
-        for (final ImageView view : mRatingViewStatus.keySet()) {
-            view.setImageDrawable(mEmptyDrawable);
-            mRatingViewStatus.put(view, false);
-        }
+    /**
+     * Retain this method to let other RatingBar can custom their decrease animation.
+     */
+    protected void emptyRatingBar() {
+        fillRatingBar(0);
     }
 
     protected void fillRatingBar(final int rating) {
@@ -150,6 +164,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     @Override
     public void setRating(int rating) {
+        if (!hasRatingViews()) {
+            return;
+        }
+
         if (rating > mNumStars) {
             rating = mNumStars;
         }
@@ -163,6 +181,11 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         }
 
         mRating = rating;
+
+        if (mOnRatingChangeListener != null) {
+            mOnRatingChangeListener.onRatingChange(this, mRating);
+        }
+
         fillRatingBar(rating);
     }
 
@@ -174,6 +197,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     @Override
     public void setStarPadding(int ratingPadding) {
         mPadding = ratingPadding;
+
+        if (!hasRatingViews()) {
+            return;
+        }
 
         for (final ImageView view : mRatingViewStatus.keySet()) {
             view.setPadding(mPadding, mPadding, mPadding, mPadding);
@@ -189,6 +216,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     public void setEmptyDrawable(Drawable drawable) {
         mEmptyDrawable = drawable;
 
+        if (!hasRatingViews()) {
+            return;
+        }
+
         for (final ImageView view : mRatingViewStatus.keySet()) {
             if (!mRatingViewStatus.get(view)) {
                 view.setImageDrawable(drawable);
@@ -200,10 +231,22 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     public void setFilledDrawable(Drawable drawable) {
         mFilledDrawable = drawable;
 
+        if (!hasRatingViews()) {
+            return;
+        }
+
         for (final ImageView view : mRatingViewStatus.keySet()) {
             if (mRatingViewStatus.get(view)) {
                 view.setImageDrawable(drawable);
             }
         }
+    }
+
+    protected boolean hasRatingViews() {
+        return mRatingViewStatus != null && mRatingViewStatus.size() > 0;
+    }
+
+    public void setOnRatingChangeListener(OnRatingChangeListener onRatingChangeListener) {
+        mOnRatingChangeListener = onRatingChangeListener;
     }
 }
