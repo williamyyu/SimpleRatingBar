@@ -1,24 +1,31 @@
 # SimpleRatingBar
 [![JitPack](https://jitpack.io/v/ome450901/SimpleRatingBar.svg)](https://jitpack.io/#ome450901/SimpleRatingBar)
 
-There are two RatingBars provided:
-1. BaseRatingBar 
-A RatingBar without any animation.
-2. ScaleRatingBar
-A RatingBar with progressive and scale animation.
+>This is a very simple RatingBar library, which you can just simply extend BaseRatingBar to implement your own animation RatingBar in a few steps!
+
+Current we already have three RatingBars :
+- BaseRatingBar  
+    A RatingBar without any animation.
+- ScaleRatingBar  
+    A RatingBar with progressive and scale animation.
+- RotationRatingBar (contributed by [nappannda](https://github.com/nappannda))  
+    A RatingBar with progressive and rotate animation.
 
 ## Demo
 ![](images/demo.gif)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
 ## Feature
-- Scale animation
+- Support use touch to change rating
 - Custom drawable's padding
 - Custom your empty and filled drawable
 - Click again to clear rating
+- Rotate animation
+- Scale animation
 
 ## How To Use
-Using Gradle from JitPack:
+### Install
+from JitPack:
 
 ```gradle
 allprojects {
@@ -29,11 +36,10 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.0'
+    compile 'com.github.ome450901:SimpleRatingBar:1.1'
 }
 ```
 
-## Usages
 
 ### In Xml
 ```xml
@@ -56,11 +62,27 @@ ScaleRatingBar ratingBar = new ScaleRatingBar(this);
 ratingBar.setNumStars(5);
 ratingBar.setRating(3);
 ratingBar.setStarPadding(10);
-ratingBar.setEmptyDrawable(getResources().getDrawable(R.drawable.start_empty));
-ratingBar.setFilledDrawable(getResources().getDrawable(R.drawable.start_empty));
+ratingBar.setEmptyDrawableRes(R.drawable.start_empty);
+ratingBar.setFilledDrawableRes(R.drawable.start_empty);
+ratingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
+    @Override
+        public void onRatingChange(BaseRatingBar ratingBar, int rating) {
+            Log.e(TAG, "onRatingChange: " + rating);
+    }
+});
 ```
 
+## Want to Implement Your Own Animation?
+#### Only 2 Steps you need to do:
+- Create a class that extend `BaseRatingBar`
+- Override the `emptyRatingBar` and `fillRatingBar` this two method, and then you can start implement your own animaion!
+
+>You can follow [ScaleRatingBar](https://github.com/ome450901/SimpleRatingBar/blob/master/library/src/main/java/com/willy/ratingbar/ScaleRatingBar.java) to implement your own class.
+
 ## Todo
-- Use touch event to change rating
+- Support float rating
 - Implement some other animations
 - Find a better way to implement animation
+
+## About Me
+Welcome to follow me on [Medium](https://medium.com/@ome450901).
