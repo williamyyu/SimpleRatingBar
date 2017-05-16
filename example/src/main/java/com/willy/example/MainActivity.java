@@ -34,11 +34,11 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currentRating = scaleRatingBar.getRating();
-                scaleRatingBar.setRating(currentRating + 1);
-
-                currentRating = baseRatingBar.getRating();
+                int  currentRating = baseRatingBar.getRating();
                 baseRatingBar.setRating(currentRating + 1);
+
+                currentRating = scaleRatingBar.getRating();
+                scaleRatingBar.setRating(currentRating + 1);
 
                 currentRating = rotationRatingBar.getRating();
                 rotationRatingBar.setRating(currentRating + 1);

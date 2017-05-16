@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +27,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     public static final String TAG = "SimpleRatingBar";
 
+    public static final int MAX_CLICK_DURATION = 200;
+
     protected int mNumStars = 5;
     protected int mRating = 0;
     protected int mPadding = 20;
@@ -36,6 +39,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private OnRatingChangeListener mOnRatingChangeListener;
 
     protected Map<ImageView, Boolean> mRatingViewStatus;
+    protected Map<ImageView, Float> mRatingViewPosition;
 
     public BaseRatingBar(Context context) {
         this(context, null);
@@ -71,6 +75,17 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         }
 
         initRatingView();
+        addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                initRatingViewPosition();
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+
+            }
+        });
     }
 
     private void initRatingView() {
@@ -94,30 +109,73 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private ImageView getRatingView(final int ratingViewId, Drawable drawable) {
         ImageView imageView = new ImageView(getContext());
         imageView.setId(ratingViewId);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setPadding(mPadding, mPadding, mPadding, mPadding);
         imageView.setImageDrawable(drawable);
-        imageView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int rating = v.getId();
-
-                if (!hasRatingViews()) {
-                    return;
-                }
-
-                if (mRating == rating) {
-                    clearRating();
-                    return;
-                }
-
-                setRating(rating);
-            }
-        });
         return imageView;
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float eventX = event.getX();
+        int rating;
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                for (final ImageView view : mRatingViewStatus.keySet()) {
+                    int width = view.getWidth();
+
+                    if (eventX < width / 2) {
+                        setRating(0);
+                    } else if (eventX > view.getX() && eventX < view.getX() + width) {
+                        rating = view.getId();
+                        setRating(rating);
+                    }
+                }
+                return false;
+            case MotionEvent.ACTION_UP:
+                float duration = event.getEventTime() - event.getDownTime();
+                if (duration < MAX_CLICK_DURATION) {
+                    // Single click event
+                    for (final ImageView view : mRatingViewStatus.keySet()) {
+                        int width = view.getWidth();
+                        if (eventX > view.getX() && eventX < view.getX() + width) {
+                            rating = view.getId();
+                            if (mRating == rating) {
+                                clearRating();
+                                break;
+                            }
+                            setRating(view.getId());
+                        }
+                    }
+                } else {
+                    // Is a move event
+                }
+
+                break;
+        }
+        return true;
+    }
+
+    private void initRatingViewPosition() {
+        if (mRatingViewPosition == null) {
+            mRatingViewPosition = new LinkedHashMap<>();
+        }
+
+        for (final ImageView view : mRatingViewStatus.keySet()) {
+            mRatingViewPosition.put(view, view.getX());
+        }
     }
 
     private void removeAllRatingViews() {
         mRatingViewStatus.clear();
+        mRatingViewPosition.clear();
         removeAllViews();
     }
 
