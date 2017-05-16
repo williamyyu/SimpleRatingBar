@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.ScaleRatingBar;
+import com.willy.ratingbar.RotationRatingBar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         final ScaleRatingBar scaleRatingBar = (ScaleRatingBar) findViewById(R.id.simpleRatingBar);
         final BaseRatingBar baseRatingBar = (BaseRatingBar) findViewById(R.id.baseRatingBar);
+        final RotationRatingBar rotationRatingBar = (RotationRatingBar) findViewById(R.id.rotationRatingBar);
 
         scaleRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
 
                 currentRating = baseRatingBar.getRating();
                 baseRatingBar.setRating(currentRating + 1);
+
+                currentRating = rotationRatingBar.getRating();
+                rotationRatingBar.setRating(currentRating + 1);
             }
         });
     }
