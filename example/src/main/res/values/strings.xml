@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Example</string>
+
+    <string name="all_baseratingbar_title">BaseRatingBar</string>
+    <string name="all_scaleratingbar_title">ScaleRatingBar</string>
+    <string name="all_rotationratingbar_title">RotationRatingBar</string>
+    <string name="all_add_rating_title">Add rating</string>
 </resources>
