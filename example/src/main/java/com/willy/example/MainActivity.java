@@ -19,9 +19,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final BaseRatingBar baseRatingBar = (BaseRatingBar) findViewById(R.id.baseRatingBar);
-        final ScaleRatingBar scaleRatingBar = (ScaleRatingBar) findViewById(R.id.simpleRatingBar);
-        final RotationRatingBar rotationRatingBar = (RotationRatingBar) findViewById(R.id.rotationRatingBar);
+        final BaseRatingBar baseRatingBar = (BaseRatingBar) findViewById(R.id.baseratingbar_main);
+        final ScaleRatingBar scaleRatingBar = (ScaleRatingBar) findViewById(R.id.scaleratingbar_main);
+        final RotationRatingBar rotationRatingBar = (RotationRatingBar) findViewById(R.id.rotationratingbar_main);
 
         baseRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button addRatingButton = (Button) findViewById(R.id.button_main_add_rating);
+        addRatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int  currentRating = baseRatingBar.getRating();

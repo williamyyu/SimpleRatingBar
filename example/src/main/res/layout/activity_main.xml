@@ -12,10 +12,10 @@
     tools:layout_editor_absoluteY="81dp">
 
     <TextView
-        android:id="@+id/baseRatingBarTextView"
+        android:id="@+id/textview_main_baseratingbar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/base_rating_bar"
+        android:text="@string/all_baseratingbar_title"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="96dp"
@@ -26,13 +26,13 @@
         app:layout_constraintHorizontal_bias="0.501"/>
 
     <com.willy.ratingbar.BaseRatingBar
-        android:id="@+id/baseRatingBar"
+        android:id="@+id/baseratingbar_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         rb:numStars="7"
         rb:starPadding="5"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/baseRatingBarTextView"
+        app:layout_constraintTop_toBottomOf="@+id/textview_main_baseratingbar_title"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
@@ -40,13 +40,13 @@
     </com.willy.ratingbar.BaseRatingBar>
 
     <TextView
-        android:id="@+id/scaleRatingBarTextView"
+        android:id="@+id/textview_main_scaleratingbar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/scale_rating_bar"
+        android:text="@string/all_scaleratingbar_title"
         android:textStyle="bold"
         android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@+id/baseRatingBar"
+        app:layout_constraintTop_toBottomOf="@+id/baseratingbar_main"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
@@ -55,11 +55,11 @@
 
 
     <com.willy.ratingbar.ScaleRatingBar
-        android:id="@+id/scaleRatingBar"
+        android:id="@+id/scaleratingbar_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/scaleRatingBarTextView"
+        app:layout_constraintTop_toBottomOf="@+id/textview_main_scaleratingbar_title"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
@@ -67,24 +67,24 @@
     </com.willy.ratingbar.ScaleRatingBar>
 
     <TextView
-        android:id="@+id/rotationRatingBarTextView"
+        android:id="@+id/textview_main_rotationratingbar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/rotation_rating_bar"
+        android:text="@string/all_rotationratingbar_title"
         android:textStyle="bold"
         android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@+id/scaleRatingBar"
+        app:layout_constraintTop_toBottomOf="@+id/scaleratingbar_main"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
     <com.willy.ratingbar.RotationRatingBar
-        android:id="@+id/rotationRatingBar"
+        android:id="@+id/rotationratingbar_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/rotationRatingBarTextView"
+        app:layout_constraintTop_toBottomOf="@+id/textview_main_rotationratingbar_title"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
@@ -93,12 +93,12 @@
     </com.willy.ratingbar.RotationRatingBar>
 
     <Button
-        android:id="@+id/addRatingButton"
+        android:id="@+id/button_main_add_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/add_rating"
+        android:text="@string/all_add_rating_title"
         android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@+id/rotationRatingBar"
+        app:layout_constraintTop_toBottomOf="@+id/rotationratingbar_main"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
