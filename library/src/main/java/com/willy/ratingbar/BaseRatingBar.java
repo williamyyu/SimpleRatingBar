@@ -31,6 +31,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     protected int mNumStars = 5;
     protected int mRating = 0;
+    protected int previewRating = 0;
     protected int mPadding = 20;
 
     protected Drawable mEmptyDrawable;
@@ -126,6 +127,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         int rating;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                previewRating = mRating;
                 break;
             case MotionEvent.ACTION_MOVE:
                 for (final ImageView view : mRatingViewStatus.keySet()) {
@@ -147,7 +149,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                         int width = view.getWidth();
                         if (eventX > view.getX() && eventX < view.getX() + width) {
                             rating = view.getId();
-                            if (mRating == rating) {
+                            if (previewRating == rating) {
                                 clearRating();
                                 break;
                             }
