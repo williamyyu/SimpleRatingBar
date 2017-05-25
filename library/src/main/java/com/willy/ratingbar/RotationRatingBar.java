@@ -26,8 +26,13 @@ public class RotationRatingBar extends BaseRatingBar {
         super(context, attrs, defStyleAttr);
     }
 
+    private Handler mUiHandler = new Handler();
+
     @Override
     protected void emptyRatingBar() {
+        // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
+        mUiHandler.removeCallbacksAndMessages(null);
+
         int delay = 0;
         for (final ImageView view : mRatingViewStatus.keySet()) {
             new Handler().postDelayed(new Runnable() {
@@ -42,6 +47,9 @@ public class RotationRatingBar extends BaseRatingBar {
 
     @Override
     protected void fillRatingBar(final int rating) {
+        // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
+        mUiHandler.removeCallbacksAndMessages(null);
+
         int delay = 0;
         for (final ImageView view : mRatingViewStatus.keySet()) {
             if (view.getId() <= rating) {

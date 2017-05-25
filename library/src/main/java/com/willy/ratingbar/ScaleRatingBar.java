@@ -26,11 +26,16 @@ public class ScaleRatingBar extends BaseRatingBar {
         super(context, attrs, defStyleAttr);
     }
 
+    private Handler mUiHandler = new Handler();
+
     @Override
     protected void emptyRatingBar() {
+        // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
+        mUiHandler.removeCallbacksAndMessages(null);
+
         int delay = 0;
         for (final ImageView view : mRatingViewStatus.keySet()) {
-            new Handler().postDelayed(new Runnable() {
+            mUiHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     view.setImageDrawable(mEmptyDrawable);
@@ -42,10 +47,13 @@ public class ScaleRatingBar extends BaseRatingBar {
 
     @Override
     protected void fillRatingBar(final int rating) {
+        // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
+        mUiHandler.removeCallbacksAndMessages(null);
+
         int delay = 0;
         for (final ImageView view : mRatingViewStatus.keySet()) {
             if (view.getId() <= rating) {
-                new Handler().postDelayed(new Runnable() {
+                mUiHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         view.setImageDrawable(mFilledDrawable);
