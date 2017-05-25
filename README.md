@@ -36,7 +36,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.1'
+    compile 'com.github.ome450901:SimpleRatingBar:1.1.2'
 }
 ```
 
