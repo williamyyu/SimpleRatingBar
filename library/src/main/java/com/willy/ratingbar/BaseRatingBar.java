@@ -28,10 +28,15 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     public static final String TAG = "SimpleRatingBar";
 
     public static final int MAX_CLICK_DURATION = 200;
+    private static final int MAX_CLICK_DISTANCE = 5;
 
-    protected int mNumStars = 5;
-    protected int mRating = 0;
-    protected int mPadding = 20;
+    private int mNumStars = 5;
+    private int mRating = 0;
+    private int mPreviousRating = 0;
+    private int mPadding = 20;
+
+    private float mStartX;
+    private float mStartY;
 
     protected Drawable mEmptyDrawable;
     protected Drawable mFilledDrawable;
@@ -39,7 +44,6 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private OnRatingChangeListener mOnRatingChangeListener;
 
     protected Map<ImageView, Boolean> mRatingViewStatus;
-    protected Map<ImageView, Float> mRatingViewPosition;
 
     public BaseRatingBar(Context context) {
         this(context, null);
@@ -75,17 +79,6 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         }
 
         initRatingView();
-        addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
-            @Override
-            public void onViewAttachedToWindow(View v) {
-                initRatingViewPosition();
-            }
-
-            @Override
-            public void onViewDetachedFromWindow(View v) {
-
-            }
-        });
     }
 
     private void initRatingView() {
@@ -123,59 +116,62 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         float eventX = event.getX();
+        float eventY = event.getY();
         int rating;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                mStartX = eventX;
+                mStartY = eventY;
+                mPreviousRating = mRating;
+                modifyRating(eventX);
                 break;
             case MotionEvent.ACTION_MOVE:
-                for (final ImageView view : mRatingViewStatus.keySet()) {
-                    int width = view.getWidth();
-
-                    if (eventX < width / 2) {
-                        setRating(0);
-                    } else if (eventX > view.getX() && eventX < view.getX() + width) {
-                        rating = view.getId();
-                        setRating(rating);
-                    }
-                }
-                return false;
-            case MotionEvent.ACTION_UP:
-                float duration = event.getEventTime() - event.getDownTime();
-                if (duration < MAX_CLICK_DURATION) {
-                    // Single click event
-                    for (final ImageView view : mRatingViewStatus.keySet()) {
-                        int width = view.getWidth();
-                        if (eventX > view.getX() && eventX < view.getX() + width) {
-                            rating = view.getId();
-                            if (mRating == rating) {
-                                clearRating();
-                                break;
-                            }
-                            setRating(view.getId());
-                        }
-                    }
-                } else {
-                    // Is a move event
-                }
-
+                modifyRating(eventX);
                 break;
+            case MotionEvent.ACTION_UP:
+                if (!isClickEvent(mStartX, eventX, mStartY, eventY)) {
+                    return false;
+                }
+
+                for (final ImageView view : mRatingViewStatus.keySet()) {
+                    if (!isPositionInRatingView(eventX, view)) {
+                        continue;
+                    }
+
+                    rating = view.getId();
+                    if (mPreviousRating == rating) {
+                        clearRating();
+                    } else {
+                        setRating(view.getId());
+                    }
+                    break;
+                }
         }
+
         return true;
     }
 
-    private void initRatingViewPosition() {
-        if (mRatingViewPosition == null) {
-            mRatingViewPosition = new LinkedHashMap<>();
-        }
-
+    private void modifyRating(float eventX) {
         for (final ImageView view : mRatingViewStatus.keySet()) {
-            mRatingViewPosition.put(view, view.getX());
+
+            if (eventX < view.getWidth() / 2f) {
+                setRating(0);
+                return;
+            }
+
+            if (isPositionInRatingView(eventX, view)) {
+                int rating = view.getId();
+                setRating(rating);
+            }
         }
+    }
+
+    private boolean isPositionInRatingView(float eventX, View ratingView) {
+        return eventX > ratingView.getX() && eventX < ratingView.getX() + ratingView.getWidth();
     }
 
     private void removeAllRatingViews() {
         mRatingViewStatus.clear();
-        mRatingViewPosition.clear();
         removeAllViews();
     }
 
@@ -185,6 +181,12 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             mOnRatingChangeListener.onRatingChange(BaseRatingBar.this, 0);
         }
         emptyRatingBar();
+    }
+
+    private boolean isClickEvent(float startX, float endX, float startY, float endY) {
+        float differenceX = Math.abs(startX - endX);
+        float differenceY = Math.abs(startY - endY);
+        return !(differenceX > MAX_CLICK_DISTANCE || differenceY > MAX_CLICK_DISTANCE);
     }
 
     /**
@@ -284,11 +286,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             return;
         }
 
-        for (final ImageView view : mRatingViewStatus.keySet()) {
-            if (!mRatingViewStatus.get(view)) {
-                view.setImageDrawable(drawable);
-            }
-        }
+        changeRatingViewDrawable(mEmptyDrawable);
+
     }
 
     @Override
@@ -308,11 +307,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             return;
         }
 
-        for (final ImageView view : mRatingViewStatus.keySet()) {
-            if (mRatingViewStatus.get(view)) {
-                view.setImageDrawable(drawable);
-            }
-        }
+        changeRatingViewDrawable(mFilledDrawable);
     }
 
     @Override
@@ -324,7 +319,15 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         }
     }
 
-    protected boolean hasRatingViews() {
+    private void changeRatingViewDrawable(Drawable drawable) {
+        for (Map.Entry<ImageView, Boolean> entry : mRatingViewStatus.entrySet()) {
+            if (entry.getValue()) {
+                entry.getKey().setImageDrawable(drawable);
+            }
+        }
+    }
+
+    private boolean hasRatingViews() {
         return mRatingViewStatus != null && mRatingViewStatus.size() > 0;
     }
 

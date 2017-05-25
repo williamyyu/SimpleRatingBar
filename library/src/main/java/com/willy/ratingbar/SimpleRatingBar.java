@@ -6,8 +6,7 @@ import android.support.annotation.DrawableRes;
 /**
  * Created by willy on 2017/5/10.
  */
-
-public interface SimpleRatingBar {
+interface SimpleRatingBar {
 
     void setNumStars(int numStars);
 
