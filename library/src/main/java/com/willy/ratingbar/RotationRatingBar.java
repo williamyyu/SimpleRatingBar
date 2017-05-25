@@ -26,7 +26,7 @@ public class RotationRatingBar extends BaseRatingBar {
         super(context, attrs, defStyleAttr);
     }
 
-    private Handler mUiHandler = new Handler();
+    private final Handler mUiHandler = new Handler();
 
     @Override
     protected void emptyRatingBar() {
