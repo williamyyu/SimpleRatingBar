@@ -7,5 +7,7 @@
         <attr name="starPadding" format="integer"/>
         <attr name="drawableEmpty" format="reference"/>
         <attr name="drawableFilled" format="reference"/>
+        <attr name="starWidth" format="dimension" />
+        <attr name="starHeight" format="dimension" />
     </declare-styleable>
 </resources>
