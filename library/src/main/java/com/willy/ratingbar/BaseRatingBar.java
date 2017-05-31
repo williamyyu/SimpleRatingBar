@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -34,6 +35,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private int mRating = 0;
     private int mPreviousRating = 0;
     private int mPadding = 20;
+    private int mStarWidth;
+    private int mStarHeight;
 
     private float mStartX;
     private float mStartY;
@@ -68,6 +71,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mRating = typedArray.getInt(R.styleable.RatingBarAttributes_rating, mRating);
         mEmptyDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableEmpty);
         mFilledDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableFilled);
+        mStarWidth = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starWidth, 0);
+        mStarHeight = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starHeight, 0);
         typedArray.recycle();
 
         if (mEmptyDrawable == null) {
@@ -83,6 +88,9 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     private void initRatingView() {
         mRatingViewStatus = new LinkedHashMap<>();
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                mStarWidth == 0 ? LayoutParams.WRAP_CONTENT : mStarWidth,
+                mStarHeight == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : mStarHeight);
 
         for (int i = 1; i <= mNumStars; i++) {
             ImageView ratingView;
@@ -93,7 +101,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 ratingView = getRatingView(i, mEmptyDrawable);
                 mRatingViewStatus.put(ratingView, false);
             }
-            addView(ratingView);
+            addView(ratingView, params);
         }
 
         setRating(mRating);
