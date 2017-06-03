@@ -37,7 +37,7 @@ public class ScaleRatingBar extends BaseRatingBar {
             mUiHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    view.setEmptyDrawable(mEmptyDrawable);
+                    view.setEmpty();
                     mRatingViewStatus.put(view, false);
                 }
             }, delay += 5);
