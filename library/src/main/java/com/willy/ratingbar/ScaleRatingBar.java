@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 
 /**
  * Created by willy on 2017/5/5.
@@ -34,11 +33,11 @@ public class ScaleRatingBar extends BaseRatingBar {
         mUiHandler.removeCallbacksAndMessages(null);
 
         int delay = 0;
-        for (final ImageView view : mRatingViewStatus.keySet()) {
+        for (final PartialView view : mRatingViewStatus.keySet()) {
             mUiHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    view.setImageDrawable(mEmptyDrawable);
+                    view.setEmptyDrawable(mEmptyDrawable);
                     mRatingViewStatus.put(view, false);
                 }
             }, delay += 5);
@@ -51,12 +50,12 @@ public class ScaleRatingBar extends BaseRatingBar {
         mUiHandler.removeCallbacksAndMessages(null);
 
         int delay = 0;
-        for (final ImageView view : mRatingViewStatus.keySet()) {
+        for (final PartialView view : mRatingViewStatus.keySet()) {
             if (view.getId() <= rating) {
                 mUiHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        view.setImageDrawable(mFilledDrawable);
+                        view.setFilled();
                         mRatingViewStatus.put(view, true);
                         if (view.getId() == rating) {
                             Animation scaleUp = AnimationUtils.loadAnimation(getContext(), R.anim.scale_up);
@@ -67,7 +66,7 @@ public class ScaleRatingBar extends BaseRatingBar {
                     }
                 }, delay += 15);
             } else {
-                view.setImageDrawable(mEmptyDrawable);
+                view.setEmpty();
                 mRatingViewStatus.put(view, false);
             }
         }

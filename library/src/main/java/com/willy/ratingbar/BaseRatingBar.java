@@ -3,13 +3,12 @@ package com.willy.ratingbar;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import java.util.LinkedHashMap;
@@ -43,7 +42,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     private OnRatingChangeListener mOnRatingChangeListener;
 
-    protected Map<ImageView, Boolean> mRatingViewStatus;
+    protected Map<PartialView, Boolean> mRatingViewStatus;
 
     public BaseRatingBar(Context context) {
         this(context, null);
@@ -71,11 +70,11 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         typedArray.recycle();
 
         if (mEmptyDrawable == null) {
-            mEmptyDrawable = getResources().getDrawable(R.drawable.empty);
+            mEmptyDrawable = ContextCompat.getDrawable(getContext(), R.drawable.empty);
         }
 
         if (mFilledDrawable == null) {
-            mFilledDrawable = getResources().getDrawable(R.drawable.filled);
+            mFilledDrawable = ContextCompat.getDrawable(getContext(), R.drawable.filled);
         }
 
         initRatingView();
@@ -85,27 +84,27 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mRatingViewStatus = new LinkedHashMap<>();
 
         for (int i = 1; i <= mNumStars; i++) {
-            ImageView ratingView;
+            PartialView partialView = getPartialView(i, mFilledDrawable, mEmptyDrawable);
             if (i <= mRating) {
-                ratingView = getRatingView(i, mFilledDrawable);
-                mRatingViewStatus.put(ratingView, true);
+                partialView.setFilled();
+                mRatingViewStatus.put(partialView, true);
             } else {
-                ratingView = getRatingView(i, mEmptyDrawable);
-                mRatingViewStatus.put(ratingView, false);
+                partialView.setEmpty();
+                mRatingViewStatus.put(partialView, false);
             }
-            addView(ratingView);
+            addView(partialView);
         }
 
         setRating(mRating);
     }
 
-    private ImageView getRatingView(final int ratingViewId, Drawable drawable) {
-        ImageView imageView = new ImageView(getContext());
-        imageView.setId(ratingViewId);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        imageView.setPadding(mPadding, mPadding, mPadding, mPadding);
-        imageView.setImageDrawable(drawable);
-        return imageView;
+    private PartialView getPartialView(final int ratingViewId, Drawable filledDrawable, Drawable emptyDrawable) {
+        PartialView partialView = new PartialView(getContext());
+        partialView.setId(ratingViewId);
+        partialView.setPadding(mPadding, mPadding, mPadding, mPadding);
+        partialView.setFilledDrawable(filledDrawable);
+        partialView.setEmptyDrawable(emptyDrawable);
+        return partialView;
     }
 
     @Override
@@ -133,7 +132,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                     return false;
                 }
 
-                for (final ImageView view : mRatingViewStatus.keySet()) {
+                for (final PartialView view : mRatingViewStatus.keySet()) {
                     if (!isPositionInRatingView(eventX, view)) {
                         continue;
                     }
@@ -152,7 +151,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     private void modifyRating(float eventX) {
-        for (final ImageView view : mRatingViewStatus.keySet()) {
+        for (final PartialView view : mRatingViewStatus.keySet()) {
 
             if (eventX < view.getWidth() / 2f) {
                 setRating(0);
@@ -197,12 +196,12 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     protected void fillRatingBar(final int rating) {
-        for (final ImageView view : mRatingViewStatus.keySet()) {
+        for (final PartialView view : mRatingViewStatus.keySet()) {
             if (view.getId() <= rating) {
-                view.setImageDrawable(mFilledDrawable);
+                view.setFilled();
                 mRatingViewStatus.put(view, true);
             } else {
-                view.setImageDrawable(mEmptyDrawable);
+                view.setEmpty();
                 mRatingViewStatus.put(view, false);
             }
         }
@@ -268,7 +267,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
         mPadding = ratingPadding;
 
-        for (final ImageView view : mRatingViewStatus.keySet()) {
+        for (final PartialView view : mRatingViewStatus.keySet()) {
             view.setPadding(mPadding, mPadding, mPadding, mPadding);
         }
     }
@@ -286,20 +285,16 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             return;
         }
 
-        for (Map.Entry<ImageView, Boolean> entry : mRatingViewStatus.entrySet()) {
+        for (Map.Entry<PartialView, Boolean> entry : mRatingViewStatus.entrySet()) {
             if (!entry.getValue()) {
-                entry.getKey().setImageDrawable(drawable);
+                entry.getKey().setEmptyDrawable(drawable);
             }
         }
     }
 
     @Override
     public void setEmptyDrawableRes(@DrawableRes int res) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setEmptyDrawable(getContext().getDrawable(res));
-        } else {
-            setEmptyDrawable(getContext().getResources().getDrawable(res));
-        }
+        setEmptyDrawable(ContextCompat.getDrawable(getContext(), res));
     }
 
     @Override
@@ -310,20 +305,16 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             return;
         }
 
-        for (Map.Entry<ImageView, Boolean> entry : mRatingViewStatus.entrySet()) {
+        for (Map.Entry<PartialView, Boolean> entry : mRatingViewStatus.entrySet()) {
             if (entry.getValue()) {
-                entry.getKey().setImageDrawable(drawable);
+                entry.getKey().setFilledDrawable(drawable);
             }
         }
     }
 
     @Override
     public void setFilledDrawableRes(@DrawableRes int res) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            setFilledDrawable(getContext().getDrawable(res));
-        } else {
-            setFilledDrawable(getContext().getResources().getDrawable(res));
-        }
+        setFilledDrawable(ContextCompat.getDrawable(getContext(), res));
     }
 
     private boolean hasRatingViews() {
