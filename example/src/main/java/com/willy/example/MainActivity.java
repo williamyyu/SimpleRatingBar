@@ -49,13 +49,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 float  currentRating = baseRatingBar.getRating();
-                baseRatingBar.setRating(currentRating + 1);
+                baseRatingBar.setRating(currentRating + 0.25f);
 
                 currentRating = scaleRatingBar.getRating();
-                scaleRatingBar.setRating(currentRating + 1);
+                scaleRatingBar.setRating(currentRating + 0.25f);
 
                 currentRating = rotationRatingBar.getRating();
-                rotationRatingBar.setRating(currentRating + 1);
+                rotationRatingBar.setRating(currentRating + 0.25f);
             }
         });
     }

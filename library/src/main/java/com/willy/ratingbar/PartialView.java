@@ -3,8 +3,6 @@ package com.willy.ratingbar;
 import android.content.Context;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.DrawableRes;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.ImageView;
@@ -43,17 +41,9 @@ public class PartialView extends RelativeLayout {
         addView(mEmptyView);
     }
 
-    public void setFilledDrawableRes(@DrawableRes int res) {
-        setFilledDrawable(ContextCompat.getDrawable(getContext(), res));
-    }
-
     public void setFilledDrawable(Drawable drawable) {
         ClipDrawable clipDrawable = new ClipDrawable(drawable, Gravity.LEFT, ClipDrawable.HORIZONTAL);
         mFilledView.setImageDrawable(clipDrawable);
-    }
-
-    public void setEmptyDrawableRes(@DrawableRes int res) {
-        setEmptyDrawable(ContextCompat.getDrawable(getContext(), res));
     }
 
     public void setEmptyDrawable(Drawable drawable) {
@@ -69,5 +59,13 @@ public class PartialView extends RelativeLayout {
     public void setEmpty() {
         mFilledView.getDrawable().setLevel(0);
         mEmptyView.getDrawable().setLevel(10000);
+    }
+
+    public void setPartial(float rating) {
+        float percentage = rating % 1;
+        int level = (int) (10000 * percentage);
+        level = level == 0 ? 1 : level;
+        mFilledView.getDrawable().setLevel(level);
+        mEmptyView.getDrawable().setLevel(10000 - level);
     }
 }

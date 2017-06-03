@@ -51,11 +51,16 @@ public class RotationRatingBar extends BaseRatingBar {
 
         int delay = 0;
         for (final PartialView view : mRatingViewStatus.keySet()) {
-            if (view.getId() <= rating) {
+            if (view.getId() <= rating + 1) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        view.setFilled();
+                        if (view.getId() == (int) rating + 1) {
+                            view.setPartial(rating);
+                        } else {
+                            view.setFilled();
+                        }
+
                         mRatingViewStatus.put(view, true);
                         if (view.getId() == rating) {
                             Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotation);

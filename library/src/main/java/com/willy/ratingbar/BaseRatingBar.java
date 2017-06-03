@@ -166,7 +166,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     private boolean isPositionInRatingView(float eventX, View ratingView) {
-        return eventX > ratingView.getX() && eventX < ratingView.getX() + ratingView.getWidth();
+        return eventX > ratingView.getLeft() && eventX < ratingView.getRight();
     }
 
     private void removeAllRatingViews() {
@@ -197,8 +197,12 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     protected void fillRatingBar(final float rating) {
         for (final PartialView view : mRatingViewStatus.keySet()) {
-            if (view.getId() <= rating) {
-                view.setFilled();
+            if (view.getId() <= rating + 1) {
+                if (view.getId() == (int) rating + 1) {
+                    view.setPartial(rating);
+                } else {
+                    view.setFilled();
+                }
                 mRatingViewStatus.put(view, true);
             } else {
                 view.setEmpty();
