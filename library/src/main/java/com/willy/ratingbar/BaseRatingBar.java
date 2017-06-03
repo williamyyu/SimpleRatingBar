@@ -286,8 +286,11 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             return;
         }
 
-        changeRatingViewDrawable(mEmptyDrawable);
-
+        for (Map.Entry<ImageView, Boolean> entry : mRatingViewStatus.entrySet()) {
+            if (!entry.getValue()) {
+                entry.getKey().setImageDrawable(drawable);
+            }
+        }
     }
 
     @Override
@@ -307,7 +310,11 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             return;
         }
 
-        changeRatingViewDrawable(mFilledDrawable);
+        for (Map.Entry<ImageView, Boolean> entry : mRatingViewStatus.entrySet()) {
+            if (entry.getValue()) {
+                entry.getKey().setImageDrawable(drawable);
+            }
+        }
     }
 
     @Override
@@ -316,14 +323,6 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             setFilledDrawable(getContext().getDrawable(res));
         } else {
             setFilledDrawable(getContext().getResources().getDrawable(res));
-        }
-    }
-
-    private void changeRatingViewDrawable(Drawable drawable) {
-        for (Map.Entry<ImageView, Boolean> entry : mRatingViewStatus.entrySet()) {
-            if (entry.getValue()) {
-                entry.getKey().setImageDrawable(drawable);
-            }
         }
     }
 
