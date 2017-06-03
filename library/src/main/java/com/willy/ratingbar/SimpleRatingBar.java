@@ -12,9 +12,9 @@ interface SimpleRatingBar {
 
     int getNumStars();
 
-    void setRating(int rating);
+    void setRating(float rating);
 
-    int getRating();
+    float getRating();
 
     void setStarPadding(int ratingPadding);
 

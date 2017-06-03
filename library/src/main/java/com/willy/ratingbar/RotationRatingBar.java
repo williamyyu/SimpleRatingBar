@@ -45,7 +45,7 @@ public class RotationRatingBar extends BaseRatingBar {
     }
 
     @Override
-    protected void fillRatingBar(final int rating) {
+    protected void fillRatingBar(final float rating) {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
         mUiHandler.removeCallbacksAndMessages(null);
 

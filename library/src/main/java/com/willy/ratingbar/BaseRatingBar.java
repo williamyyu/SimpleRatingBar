@@ -21,7 +21,7 @@ import java.util.Map;
 public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     public interface OnRatingChangeListener {
-        void onRatingChange(BaseRatingBar ratingBar, int rating);
+        void onRatingChange(BaseRatingBar ratingBar, float rating);
     }
 
     public static final String TAG = "SimpleRatingBar";
@@ -30,8 +30,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private static final int MAX_CLICK_DISTANCE = 5;
 
     private int mNumStars = 5;
-    private int mRating = 0;
-    private int mPreviousRating = 0;
+    private float mRating = 0;
+    private float mPreviousRating = 0;
     private int mPadding = 20;
 
     private float mStartX;
@@ -64,7 +64,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RatingBarAttributes);
         mNumStars = typedArray.getInt(R.styleable.RatingBarAttributes_numStars, mNumStars);
         mPadding = typedArray.getInt(R.styleable.RatingBarAttributes_starPadding, mPadding);
-        mRating = typedArray.getInt(R.styleable.RatingBarAttributes_rating, mRating);
+        mRating = typedArray.getFloat(R.styleable.RatingBarAttributes_rating, mRating);
         mEmptyDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableEmpty);
         mFilledDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableFilled);
         typedArray.recycle();
@@ -195,7 +195,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         fillRatingBar(0);
     }
 
-    protected void fillRatingBar(final int rating) {
+    protected void fillRatingBar(final float rating) {
         for (final PartialView view : mRatingViewStatus.keySet()) {
             if (view.getId() <= rating) {
                 view.setFilled();
@@ -224,7 +224,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     @Override
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         if (!hasRatingViews()) {
             return;
         }
@@ -251,7 +251,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     @Override
-    public int getRating() {
+    public float getRating() {
         return mRating;
     }
 

@@ -25,21 +25,21 @@ public class MainActivity extends AppCompatActivity {
 
         baseRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
-            public void onRatingChange(BaseRatingBar ratingBar, int rating) {
+            public void onRatingChange(BaseRatingBar ratingBar, float rating) {
                 Log.d(TAG, "BaseRatingBar onRatingChange: " + rating);
             }
         });
 
         scaleRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
-            public void onRatingChange(BaseRatingBar ratingBar, int rating) {
+            public void onRatingChange(BaseRatingBar ratingBar, float rating) {
                 Log.d(TAG, "ScaleRatingBar onRatingChange: " + rating);
             }
         });
 
         rotationRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
-            public void onRatingChange(BaseRatingBar ratingBar, int rating) {
+            public void onRatingChange(BaseRatingBar ratingBar, float rating) {
                 Log.d(TAG, "RotationRatingBar onRatingChange: " + rating);
             }
         });
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         addRatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int  currentRating = baseRatingBar.getRating();
+                float  currentRating = baseRatingBar.getRating();
                 baseRatingBar.setRating(currentRating + 1);
 
                 currentRating = scaleRatingBar.getRating();
