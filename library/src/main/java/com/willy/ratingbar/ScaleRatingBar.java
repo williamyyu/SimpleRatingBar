@@ -13,6 +13,8 @@ import android.view.animation.AnimationUtils;
 
 public class ScaleRatingBar extends BaseRatingBar {
 
+    private static Handler sUiHandler = new Handler();
+
     public ScaleRatingBar(Context context) {
         super(context);
     }
@@ -25,20 +27,18 @@ public class ScaleRatingBar extends BaseRatingBar {
         super(context, attrs, defStyleAttr);
     }
 
-    private Handler mUiHandler = new Handler();
 
     @Override
     protected void emptyRatingBar() {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-        mUiHandler.removeCallbacksAndMessages(null);
+        sUiHandler.removeCallbacksAndMessages(null);
 
         int delay = 0;
-        for (final PartialView view : mRatingViewStatus.keySet()) {
-            mUiHandler.postDelayed(new Runnable() {
+        for (final PartialView view : mPartialViews) {
+            sUiHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     view.setEmpty();
-                    mRatingViewStatus.put(view, false);
                 }
             }, delay += 5);
         }
@@ -47,32 +47,34 @@ public class ScaleRatingBar extends BaseRatingBar {
     @Override
     protected void fillRatingBar(final float rating) {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-        mUiHandler.removeCallbacksAndMessages(null);
+        sUiHandler.removeCallbacksAndMessages(null);
 
         int delay = 0;
-        for (final PartialView view : mRatingViewStatus.keySet()) {
-            if (view.getId() <= rating + 1) {
-                mUiHandler.postDelayed(new Runnable() {
+
+        for (final PartialView partialView : mPartialViews) {
+            final int ratingViewId = partialView.getId();
+            final double maxIntOfRating = Math.ceil(rating);
+
+            if (ratingViewId <= maxIntOfRating) {
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (view.getId() == (int) rating + 1) {
-                            view.setPartial(rating);
-                        } else {
-                            view.setFilled();
-                        }
-
-                        mRatingViewStatus.put(view, true);
-                        if (view.getId() == rating) {
+                        if (ratingViewId == maxIntOfRating) {
+                            partialView.setPartialFilled(rating);
+                        } else if (ratingViewId == rating) {
                             Animation scaleUp = AnimationUtils.loadAnimation(getContext(), R.anim.scale_up);
                             Animation scaleDown = AnimationUtils.loadAnimation(getContext(), R.anim.scale_down);
-                            view.startAnimation(scaleUp);
-                            view.startAnimation(scaleDown);
+                            partialView.startAnimation(scaleUp);
+                            partialView.startAnimation(scaleDown);
+                        } else {
+                            partialView.setFilled();
                         }
+
                     }
                 }, delay += 15);
+
             } else {
-                view.setEmpty();
-                mRatingViewStatus.put(view, false);
+                partialView.setEmpty();
             }
         }
     }

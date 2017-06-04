@@ -16,6 +16,7 @@ public class PartialView extends RelativeLayout {
 
     private ImageView mFilledView;
     private ImageView mEmptyView;
+    private boolean isEmpty = true;
 
     public PartialView(Context context) {
         super(context);
@@ -52,20 +53,30 @@ public class PartialView extends RelativeLayout {
     }
 
     public void setFilled() {
-        mFilledView.getDrawable().setLevel(10000);
-        mEmptyView.getDrawable().setLevel(0);
+        isEmpty = false;
+
+        mFilledView.setImageLevel(10000);
+        mEmptyView.setImageLevel(0);
+    }
+
+    public void setPartialFilled(float rating) {
+        isEmpty = false;
+
+        float percentage = rating % 1;
+        int level = (int) (10000 * percentage);
+        level = level == 0 ? 10000 : level;
+        mFilledView.setImageLevel(level);
+        mEmptyView.setImageLevel(10000 - level);
     }
 
     public void setEmpty() {
-        mFilledView.getDrawable().setLevel(0);
-        mEmptyView.getDrawable().setLevel(10000);
+        isEmpty = true;
+
+        mFilledView.setImageLevel(0);
+        mEmptyView.setImageLevel(10000);
     }
 
-    public void setPartial(float rating) {
-        float percentage = rating % 1;
-        int level = (int) (10000 * percentage);
-        level = level == 0 ? 1 : level;
-        mFilledView.getDrawable().setLevel(level);
-        mEmptyView.getDrawable().setLevel(10000 - level);
+    public boolean isEmpty() {
+        return isEmpty;
     }
 }

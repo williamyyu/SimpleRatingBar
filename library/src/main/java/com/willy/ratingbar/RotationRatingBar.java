@@ -13,6 +13,8 @@ import android.view.animation.AnimationUtils;
 
 public class RotationRatingBar extends BaseRatingBar {
 
+    private static Handler sUiHandler = new Handler();
+
     public RotationRatingBar(Context context) {
         super(context);
     }
@@ -25,20 +27,18 @@ public class RotationRatingBar extends BaseRatingBar {
         super(context, attrs, defStyleAttr);
     }
 
-    private final Handler mUiHandler = new Handler();
-
     @Override
     protected void emptyRatingBar() {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-        mUiHandler.removeCallbacksAndMessages(null);
+        sUiHandler.removeCallbacksAndMessages(null);
 
         int delay = 0;
-        for (final PartialView view : mRatingViewStatus.keySet()) {
+
+        for (final PartialView partialView : mPartialViews) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    view.setEmpty();
-                    mRatingViewStatus.put(view, false);
+                    partialView.setEmpty();
                 }
             }, delay += 5);
         }
@@ -47,30 +47,31 @@ public class RotationRatingBar extends BaseRatingBar {
     @Override
     protected void fillRatingBar(final float rating) {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-        mUiHandler.removeCallbacksAndMessages(null);
+        sUiHandler.removeCallbacksAndMessages(null);
 
         int delay = 0;
-        for (final PartialView view : mRatingViewStatus.keySet()) {
-            if (view.getId() <= rating + 1) {
+        for (final PartialView partialView : mPartialViews) {
+            final int ratingViewId = partialView.getId();
+            final double maxIntOfRating = Math.ceil(rating);
+
+            if (ratingViewId <= maxIntOfRating) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if (view.getId() == (int) rating + 1) {
-                            view.setPartial(rating);
+                        if (ratingViewId == maxIntOfRating) {
+                            partialView.setPartialFilled(rating);
+                        } else if (ratingViewId == rating) {
+                            Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotation);
+                            partialView.startAnimation(rotation);
                         } else {
-                            view.setFilled();
+                            partialView.setFilled();
                         }
 
-                        mRatingViewStatus.put(view, true);
-                        if (view.getId() == rating) {
-                            Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotation);
-                            view.startAnimation(rotation);
-                        }
                     }
                 }, delay += 15);
+
             } else {
-                view.setEmpty();
-                mRatingViewStatus.put(view, false);
+                partialView.setEmpty();
             }
         }
     }

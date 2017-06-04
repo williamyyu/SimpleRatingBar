@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
                 currentRating = rotationRatingBar.getRating();
                 rotationRatingBar.setRating(currentRating + 0.25f);
+                baseRatingBar.setFilledDrawableRes(R.drawable.filled2);
+                baseRatingBar.setEmptyDrawableRes(R.drawable.empty2);
             }
         });
     }

@@ -11,8 +11,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by willy on 2017/5/5.
@@ -26,13 +26,12 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     public static final String TAG = "SimpleRatingBar";
 
-    public static final int MAX_CLICK_DURATION = 200;
     private static final int MAX_CLICK_DISTANCE = 5;
 
-    private int mNumStars = 5;
-    private float mRating = 0;
+    private int mNumStars;
+    private int mPadding = 0;
+    private float mRating = -1;
     private float mPreviousRating = 0;
-    private int mPadding = 20;
 
     private float mStartX;
     private float mStartY;
@@ -42,7 +41,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     private OnRatingChangeListener mOnRatingChangeListener;
 
-    protected Map<PartialView, Boolean> mRatingViewStatus;
+    protected List<PartialView> mPartialViews;
 
     public BaseRatingBar(Context context) {
         this(context, null);
@@ -62,12 +61,27 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         super(context, attrs, defStyleAttr);
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RatingBarAttributes);
+        float rating = typedArray.getFloat(R.styleable.RatingBarAttributes_rating, mRating);
         mNumStars = typedArray.getInt(R.styleable.RatingBarAttributes_numStars, mNumStars);
         mPadding = typedArray.getInt(R.styleable.RatingBarAttributes_starPadding, mPadding);
-        mRating = typedArray.getFloat(R.styleable.RatingBarAttributes_rating, mRating);
         mEmptyDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableEmpty);
         mFilledDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableFilled);
         typedArray.recycle();
+
+        verifyParamsValue();
+
+        initRatingView();
+        setRating(rating);
+    }
+
+    private void verifyParamsValue() {
+        if (mNumStars <= 0) {
+            mNumStars = 5;
+        }
+
+        if (mPadding < 0) {
+            mPadding = 0;
+        }
 
         if (mEmptyDrawable == null) {
             mEmptyDrawable = ContextCompat.getDrawable(getContext(), R.drawable.empty);
@@ -77,25 +91,16 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             mFilledDrawable = ContextCompat.getDrawable(getContext(), R.drawable.filled);
         }
 
-        initRatingView();
     }
 
     private void initRatingView() {
-        mRatingViewStatus = new LinkedHashMap<>();
+        mPartialViews = new ArrayList<>();
 
         for (int i = 1; i <= mNumStars; i++) {
             PartialView partialView = getPartialView(i, mFilledDrawable, mEmptyDrawable);
-            if (i <= mRating) {
-                partialView.setFilled();
-                mRatingViewStatus.put(partialView, true);
-            } else {
-                partialView.setEmpty();
-                mRatingViewStatus.put(partialView, false);
-            }
+            mPartialViews.add(partialView);
             addView(partialView);
         }
-
-        setRating(mRating);
     }
 
     private PartialView getPartialView(final int ratingViewId, Drawable filledDrawable, Drawable emptyDrawable) {
@@ -107,87 +112,6 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         return partialView;
     }
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return true;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        float eventX = event.getX();
-        float eventY = event.getY();
-        int rating;
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mStartX = eventX;
-                mStartY = eventY;
-                mPreviousRating = mRating;
-                modifyRating(eventX);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                modifyRating(eventX);
-                break;
-            case MotionEvent.ACTION_UP:
-                if (!isClickEvent(mStartX, eventX, mStartY, eventY)) {
-                    return false;
-                }
-
-                for (final PartialView view : mRatingViewStatus.keySet()) {
-                    if (!isPositionInRatingView(eventX, view)) {
-                        continue;
-                    }
-
-                    rating = view.getId();
-                    if (mPreviousRating == rating) {
-                        clearRating();
-                    } else {
-                        setRating(view.getId());
-                    }
-                    break;
-                }
-        }
-
-        return true;
-    }
-
-    private void modifyRating(float eventX) {
-        for (final PartialView view : mRatingViewStatus.keySet()) {
-
-            if (eventX < view.getWidth() / 2f) {
-                setRating(0);
-                return;
-            }
-
-            if (isPositionInRatingView(eventX, view)) {
-                int rating = view.getId();
-                setRating(rating);
-            }
-        }
-    }
-
-    private boolean isPositionInRatingView(float eventX, View ratingView) {
-        return eventX > ratingView.getLeft() && eventX < ratingView.getRight();
-    }
-
-    private void removeAllRatingViews() {
-        mRatingViewStatus.clear();
-        removeAllViews();
-    }
-
-    private void clearRating() {
-        mRating = 0;
-        if (mOnRatingChangeListener != null) {
-            mOnRatingChangeListener.onRatingChange(BaseRatingBar.this, 0);
-        }
-        emptyRatingBar();
-    }
-
-    private boolean isClickEvent(float startX, float endX, float startY, float endY) {
-        float differenceX = Math.abs(startX - endX);
-        float differenceY = Math.abs(startY - endY);
-        return !(differenceX > MAX_CLICK_DISTANCE || differenceY > MAX_CLICK_DISTANCE);
-    }
-
     /**
      * Retain this method to let other RatingBar can custom their decrease animation.
      */
@@ -196,17 +120,18 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     protected void fillRatingBar(final float rating) {
-        for (final PartialView view : mRatingViewStatus.keySet()) {
-            if (view.getId() <= rating + 1) {
-                if (view.getId() == (int) rating + 1) {
-                    view.setPartial(rating);
+        for (PartialView partialView : mPartialViews) {
+            int ratingViewId = partialView.getId();
+            double maxIntOfRating = Math.ceil(mRating);
+
+            if (ratingViewId <= maxIntOfRating) {
+                if (ratingViewId == maxIntOfRating) {
+                    partialView.setPartialFilled(mRating);
                 } else {
-                    view.setFilled();
+                    partialView.setFilled();
                 }
-                mRatingViewStatus.put(view, true);
             } else {
-                view.setEmpty();
-                mRatingViewStatus.put(view, false);
+                partialView.setEmpty();
             }
         }
     }
@@ -217,7 +142,9 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             return;
         }
 
-        removeAllRatingViews();
+        mPartialViews.clear();
+        removeAllViews();
+
         mNumStars = numStars;
         initRatingView();
     }
@@ -229,10 +156,6 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     @Override
     public void setRating(float rating) {
-        if (!hasRatingViews()) {
-            return;
-        }
-
         if (rating > mNumStars) {
             rating = mNumStars;
         }
@@ -265,14 +188,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             return;
         }
 
-        if (!hasRatingViews()) {
-            return;
-        }
-
         mPadding = ratingPadding;
 
-        for (final PartialView view : mRatingViewStatus.keySet()) {
-            view.setPadding(mPadding, mPadding, mPadding, mPadding);
+        for (PartialView partialView : mPartialViews) {
+            partialView.setPadding(mPadding, mPadding, mPadding, mPadding);
         }
     }
 
@@ -282,38 +201,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     @Override
-    public void setEmptyDrawable(Drawable drawable) {
-        mEmptyDrawable = drawable;
-
-        if (!hasRatingViews()) {
-            return;
-        }
-
-        for (Map.Entry<PartialView, Boolean> entry : mRatingViewStatus.entrySet()) {
-            if (!entry.getValue()) {
-                entry.getKey().setEmptyDrawable(drawable);
-            }
-        }
-    }
-
-    @Override
     public void setEmptyDrawableRes(@DrawableRes int res) {
         setEmptyDrawable(ContextCompat.getDrawable(getContext(), res));
-    }
-
-    @Override
-    public void setFilledDrawable(Drawable drawable) {
-        mFilledDrawable = drawable;
-
-        if (!hasRatingViews()) {
-            return;
-        }
-
-        for (Map.Entry<PartialView, Boolean> entry : mRatingViewStatus.entrySet()) {
-            if (entry.getValue()) {
-                entry.getKey().setFilledDrawable(drawable);
-            }
-        }
     }
 
     @Override
@@ -321,8 +210,92 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         setFilledDrawable(ContextCompat.getDrawable(getContext(), res));
     }
 
-    private boolean hasRatingViews() {
-        return mRatingViewStatus != null && mRatingViewStatus.size() > 0;
+    @Override
+    public void setEmptyDrawable(Drawable drawable) {
+        mEmptyDrawable = drawable;
+
+        for (PartialView partialView : mPartialViews) {
+            partialView.setEmptyDrawable(drawable);
+        }
+    }
+
+    @Override
+    public void setFilledDrawable(Drawable drawable) {
+        mFilledDrawable = drawable;
+
+        for (PartialView partialView : mPartialViews) {
+            partialView.setFilledDrawable(drawable);
+        }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float eventX = event.getX();
+        float eventY = event.getY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mStartX = eventX;
+                mStartY = eventY;
+                mPreviousRating = mRating;
+                handleMoveEvent(eventX);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                handleMoveEvent(eventX);
+                break;
+            case MotionEvent.ACTION_UP:
+                if (!isClickEvent(mStartX, eventX, mStartY, eventY)) {
+                    return false;
+                }
+
+                handleClickEvent(eventX);
+        }
+
+        return true;
+    }
+
+    private void handleMoveEvent(float eventX) {
+        for (PartialView partialView : mPartialViews) {
+            if (eventX < partialView.getWidth() / 2f) {
+                setRating(0);
+                return;
+            }
+
+            if (isPositionInRatingView(eventX, partialView)) {
+                int rating = partialView.getId();
+                setRating(rating);
+            }
+        }
+    }
+
+    private void handleClickEvent(float eventX) {
+        for (PartialView partialView : mPartialViews) {
+            if (!isPositionInRatingView(eventX, partialView)) {
+                continue;
+            }
+
+            int rating = partialView.getId();
+            if (mPreviousRating == rating) {
+                setRating(0);
+            } else {
+                setRating(rating);
+            }
+            break;
+        }
+    }
+
+    private boolean isPositionInRatingView(float eventX, View ratingView) {
+        return eventX > ratingView.getLeft() && eventX < ratingView.getRight();
+    }
+
+    private boolean isClickEvent(float startX, float endX, float startY, float endY) {
+        float differenceX = Math.abs(startX - endX);
+        float differenceY = Math.abs(startY - endY);
+        return !(differenceX > MAX_CLICK_DISTANCE || differenceY > MAX_CLICK_DISTANCE);
     }
 
     public void setOnRatingChangeListener(OnRatingChangeListener onRatingChangeListener) {
