@@ -60,11 +60,13 @@ public class RotationRatingBar extends BaseRatingBar {
                     public void run() {
                         if (ratingViewId == maxIntOfRating) {
                             partialView.setPartialFilled(rating);
-                        } else if (ratingViewId == rating) {
-                            Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotation);
-                            partialView.startAnimation(rotation);
                         } else {
                             partialView.setFilled();
+                        }
+
+                        if (ratingViewId == rating) {
+                            Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotation);
+                            partialView.startAnimation(rotation);
                         }
 
                     }

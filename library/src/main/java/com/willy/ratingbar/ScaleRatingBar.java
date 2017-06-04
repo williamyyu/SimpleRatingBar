@@ -61,13 +61,15 @@ public class ScaleRatingBar extends BaseRatingBar {
                     public void run() {
                         if (ratingViewId == maxIntOfRating) {
                             partialView.setPartialFilled(rating);
-                        } else if (ratingViewId == rating) {
+                        } else {
+                            partialView.setFilled();
+                        }
+
+                        if (ratingViewId == rating) {
                             Animation scaleUp = AnimationUtils.loadAnimation(getContext(), R.anim.scale_up);
                             Animation scaleDown = AnimationUtils.loadAnimation(getContext(), R.anim.scale_down);
                             partialView.startAnimation(scaleUp);
                             partialView.startAnimation(scaleDown);
-                        } else {
-                            partialView.setFilled();
                         }
 
                     }
