@@ -13,6 +13,7 @@ Current we already have three RatingBars :
 
 ## Demo
 ![](images/demo.gif)  
+![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
 ## What's New (v1.2)
