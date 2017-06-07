@@ -56,7 +56,7 @@ public class ScaleRatingBar extends BaseRatingBar {
             final double maxIntOfRating = Math.ceil(rating);
 
             if (ratingViewId <= maxIntOfRating) {
-                new Handler().postDelayed(new Runnable() {
+                sUiHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         if (ratingViewId == maxIntOfRating) {

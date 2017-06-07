@@ -122,11 +122,11 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     protected void fillRatingBar(final float rating) {
         for (PartialView partialView : mPartialViews) {
             int ratingViewId = partialView.getId();
-            double maxIntOfRating = Math.ceil(mRating);
+            double maxIntOfRating = Math.ceil(rating);
 
             if (ratingViewId <= maxIntOfRating) {
                 if (ratingViewId == maxIntOfRating) {
-                    partialView.setPartialFilled(mRating);
+                    partialView.setPartialFilled(rating);
                 } else {
                     partialView.setFilled();
                 }
@@ -265,8 +265,12 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 return;
             }
 
-            if (isPositionInRatingView(eventX, partialView)) {
-                int rating = partialView.getId();
+            if (!isPositionInRatingView(eventX, partialView)) {
+                continue;
+            }
+
+            int rating = partialView.getId();
+            if (mRating != rating) {
                 setRating(rating);
             }
         }

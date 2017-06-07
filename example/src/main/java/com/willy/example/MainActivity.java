@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         addRatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                float  currentRating = baseRatingBar.getRating();
+                float currentRating = baseRatingBar.getRating();
                 baseRatingBar.setRating(currentRating + 0.25f);
 
                 currentRating = scaleRatingBar.getRating();
@@ -56,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
                 currentRating = rotationRatingBar.getRating();
                 rotationRatingBar.setRating(currentRating + 0.25f);
-                baseRatingBar.setFilledDrawableRes(R.drawable.filled2);
-                baseRatingBar.setEmptyDrawableRes(R.drawable.empty2);
             }
         });
     }
