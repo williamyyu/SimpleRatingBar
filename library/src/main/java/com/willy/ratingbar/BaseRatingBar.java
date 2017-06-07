@@ -34,6 +34,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private int mPadding = 0;
     private float mRating = -1;
     private float mPreviousRating = 0;
+    private boolean mClearRatingEnabled = true;
 
     private float mStartX;
     private float mStartY;
@@ -291,7 +292,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             }
 
             int rating = partialView.getId();
-            if (mPreviousRating == rating) {
+            if (mPreviousRating == rating && mClearRatingEnabled) {
                 setRating(0);
             } else {
                 setRating(rating);
@@ -317,5 +318,9 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     public void setOnRatingChangeListener(OnRatingChangeListener onRatingChangeListener) {
         mOnRatingChangeListener = onRatingChangeListener;
+    }
+
+    public void setClearRatingEnabled(boolean enabled) {
+        this.mClearRatingEnabled = enabled;
     }
 }
