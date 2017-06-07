@@ -54,27 +54,27 @@ public class RotationRatingBar extends BaseRatingBar {
             final int ratingViewId = partialView.getId();
             final double maxIntOfRating = Math.ceil(rating);
 
-            if (ratingViewId <= maxIntOfRating) {
-                sUiHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (ratingViewId == maxIntOfRating) {
-                            partialView.setPartialFilled(rating);
-                        } else {
-                            partialView.setFilled();
-                        }
-
-                        if (ratingViewId == rating) {
-                            Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotation);
-                            partialView.startAnimation(rotation);
-                        }
-
-                    }
-                }, delay += 15);
-
-            } else {
+            if (ratingViewId > maxIntOfRating) {
                 partialView.setEmpty();
+                continue;
             }
+
+            sUiHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (ratingViewId == maxIntOfRating) {
+                        partialView.setPartialFilled(rating);
+                    } else {
+                        partialView.setFilled();
+                    }
+
+                    if (ratingViewId == rating) {
+                        Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotation);
+                        partialView.startAnimation(rotation);
+                    }
+
+                }
+            }, delay += 15);
         }
     }
 }

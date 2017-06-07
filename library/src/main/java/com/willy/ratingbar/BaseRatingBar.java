@@ -36,8 +36,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private float mStartX;
     private float mStartY;
 
-    protected Drawable mEmptyDrawable;
-    protected Drawable mFilledDrawable;
+    private Drawable mEmptyDrawable;
+    private Drawable mFilledDrawable;
 
     private OnRatingChangeListener mOnRatingChangeListener;
 
@@ -119,19 +119,24 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         fillRatingBar(0);
     }
 
+    /**
+     * Use {maxIntOfRating} because if the rating is 3.5
+     * the view which id is 3 also need to be filled.
+     */
     protected void fillRatingBar(final float rating) {
         for (PartialView partialView : mPartialViews) {
             int ratingViewId = partialView.getId();
             double maxIntOfRating = Math.ceil(rating);
 
-            if (ratingViewId <= maxIntOfRating) {
-                if (ratingViewId == maxIntOfRating) {
-                    partialView.setPartialFilled(rating);
-                } else {
-                    partialView.setFilled();
-                }
-            } else {
+            if (ratingViewId > maxIntOfRating) {
                 partialView.setEmpty();
+                continue;
+            }
+
+            if (ratingViewId == maxIntOfRating) {
+                partialView.setPartialFilled(rating);
+            } else {
+                partialView.setFilled();
             }
         }
     }

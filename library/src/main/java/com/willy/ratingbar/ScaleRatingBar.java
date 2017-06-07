@@ -55,29 +55,29 @@ public class ScaleRatingBar extends BaseRatingBar {
             final int ratingViewId = partialView.getId();
             final double maxIntOfRating = Math.ceil(rating);
 
-            if (ratingViewId <= maxIntOfRating) {
-                sUiHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (ratingViewId == maxIntOfRating) {
-                            partialView.setPartialFilled(rating);
-                        } else {
-                            partialView.setFilled();
-                        }
-
-                        if (ratingViewId == rating) {
-                            Animation scaleUp = AnimationUtils.loadAnimation(getContext(), R.anim.scale_up);
-                            Animation scaleDown = AnimationUtils.loadAnimation(getContext(), R.anim.scale_down);
-                            partialView.startAnimation(scaleUp);
-                            partialView.startAnimation(scaleDown);
-                        }
-
-                    }
-                }, delay += 15);
-
-            } else {
+            if (ratingViewId > maxIntOfRating) {
                 partialView.setEmpty();
+                continue;
             }
+
+            sUiHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (ratingViewId == maxIntOfRating) {
+                        partialView.setPartialFilled(rating);
+                    } else {
+                        partialView.setFilled();
+                    }
+
+                    if (ratingViewId == rating) {
+                        Animation scaleUp = AnimationUtils.loadAnimation(getContext(), R.anim.scale_up);
+                        Animation scaleDown = AnimationUtils.loadAnimation(getContext(), R.anim.scale_down);
+                        partialView.startAnimation(scaleUp);
+                        partialView.startAnimation(scaleDown);
+                    }
+
+                }
+            }, delay += 15);
         }
     }
 }
