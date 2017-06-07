@@ -7,5 +7,7 @@
         <attr name="starPadding" format="integer" />
         <attr name="drawableEmpty" format="reference" />
         <attr name="drawableFilled" format="reference" />
+        <attr name="touchable" format="boolean" />
+        <attr name="clearRatingEnabled" format="boolean" />
     </declare-styleable>
 </resources>

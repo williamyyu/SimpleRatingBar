@@ -69,6 +69,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mPadding = typedArray.getInt(R.styleable.RatingBarAttributes_starPadding, mPadding);
         mEmptyDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableEmpty);
         mFilledDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableFilled);
+        mIsTouchable = typedArray.getBoolean(R.styleable.RatingBarAttributes_touchable, mIsTouchable);
+        mClearRatingEnabled = typedArray.getBoolean(R.styleable.RatingBarAttributes_clearRatingEnabled, mClearRatingEnabled);
         typedArray.recycle();
 
         verifyParamsValue();
