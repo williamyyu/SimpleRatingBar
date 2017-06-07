@@ -6,13 +6,14 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 
 /**
  * Created by willy on 2017/5/5.
  */
 
 public class ScaleRatingBar extends BaseRatingBar {
+
+    private static Handler sUiHandler = new Handler();
 
     public ScaleRatingBar(Context context) {
         super(context);
@@ -26,50 +27,57 @@ public class ScaleRatingBar extends BaseRatingBar {
         super(context, attrs, defStyleAttr);
     }
 
-    private Handler mUiHandler = new Handler();
 
     @Override
     protected void emptyRatingBar() {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-        mUiHandler.removeCallbacksAndMessages(null);
+        sUiHandler.removeCallbacksAndMessages(null);
 
         int delay = 0;
-        for (final ImageView view : mRatingViewStatus.keySet()) {
-            mUiHandler.postDelayed(new Runnable() {
+        for (final PartialView view : mPartialViews) {
+            sUiHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    view.setImageDrawable(mEmptyDrawable);
-                    mRatingViewStatus.put(view, false);
+                    view.setEmpty();
                 }
             }, delay += 5);
         }
     }
 
     @Override
-    protected void fillRatingBar(final int rating) {
+    protected void fillRatingBar(final float rating) {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-        mUiHandler.removeCallbacksAndMessages(null);
+        sUiHandler.removeCallbacksAndMessages(null);
 
         int delay = 0;
-        for (final ImageView view : mRatingViewStatus.keySet()) {
-            if (view.getId() <= rating) {
-                mUiHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        view.setImageDrawable(mFilledDrawable);
-                        mRatingViewStatus.put(view, true);
-                        if (view.getId() == rating) {
-                            Animation scaleUp = AnimationUtils.loadAnimation(getContext(), R.anim.scale_up);
-                            Animation scaleDown = AnimationUtils.loadAnimation(getContext(), R.anim.scale_down);
-                            view.startAnimation(scaleUp);
-                            view.startAnimation(scaleDown);
-                        }
-                    }
-                }, delay += 15);
-            } else {
-                view.setImageDrawable(mEmptyDrawable);
-                mRatingViewStatus.put(view, false);
+
+        for (final PartialView partialView : mPartialViews) {
+            final int ratingViewId = partialView.getId();
+            final double maxIntOfRating = Math.ceil(rating);
+
+            if (ratingViewId > maxIntOfRating) {
+                partialView.setEmpty();
+                continue;
             }
+
+            sUiHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (ratingViewId == maxIntOfRating) {
+                        partialView.setPartialFilled(rating);
+                    } else {
+                        partialView.setFilled();
+                    }
+
+                    if (ratingViewId == rating) {
+                        Animation scaleUp = AnimationUtils.loadAnimation(getContext(), R.anim.scale_up);
+                        Animation scaleDown = AnimationUtils.loadAnimation(getContext(), R.anim.scale_down);
+                        partialView.startAnimation(scaleUp);
+                        partialView.startAnimation(scaleDown);
+                    }
+
+                }
+            }, delay += 15);
         }
     }
 }

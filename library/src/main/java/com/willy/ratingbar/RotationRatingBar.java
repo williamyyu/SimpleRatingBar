@@ -6,13 +6,14 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 
 /**
  * Created by nappannda on 2017/05/16.
  */
 
 public class RotationRatingBar extends BaseRatingBar {
+
+    private static Handler sUiHandler = new Handler();
 
     public RotationRatingBar(Context context) {
         super(context);
@@ -26,48 +27,54 @@ public class RotationRatingBar extends BaseRatingBar {
         super(context, attrs, defStyleAttr);
     }
 
-    private final Handler mUiHandler = new Handler();
-
     @Override
     protected void emptyRatingBar() {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-        mUiHandler.removeCallbacksAndMessages(null);
+        sUiHandler.removeCallbacksAndMessages(null);
 
         int delay = 0;
-        for (final ImageView view : mRatingViewStatus.keySet()) {
+
+        for (final PartialView partialView : mPartialViews) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    view.setImageDrawable(mEmptyDrawable);
-                    mRatingViewStatus.put(view, false);
+                    partialView.setEmpty();
                 }
             }, delay += 5);
         }
     }
 
     @Override
-    protected void fillRatingBar(final int rating) {
+    protected void fillRatingBar(final float rating) {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-        mUiHandler.removeCallbacksAndMessages(null);
+        sUiHandler.removeCallbacksAndMessages(null);
 
         int delay = 0;
-        for (final ImageView view : mRatingViewStatus.keySet()) {
-            if (view.getId() <= rating) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        view.setImageDrawable(mFilledDrawable);
-                        mRatingViewStatus.put(view, true);
-                        if (view.getId() == rating) {
-                            Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotation);
-                            view.startAnimation(rotation);
-                        }
-                    }
-                }, delay += 15);
-            } else {
-                view.setImageDrawable(mEmptyDrawable);
-                mRatingViewStatus.put(view, false);
+        for (final PartialView partialView : mPartialViews) {
+            final int ratingViewId = partialView.getId();
+            final double maxIntOfRating = Math.ceil(rating);
+
+            if (ratingViewId > maxIntOfRating) {
+                partialView.setEmpty();
+                continue;
             }
+
+            sUiHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (ratingViewId == maxIntOfRating) {
+                        partialView.setPartialFilled(rating);
+                    } else {
+                        partialView.setFilled();
+                    }
+
+                    if (ratingViewId == rating) {
+                        Animation rotation = AnimationUtils.loadAnimation(getContext(), R.anim.rotation);
+                        partialView.startAnimation(rotation);
+                    }
+
+                }
+            }, delay += 15);
         }
     }
 }
