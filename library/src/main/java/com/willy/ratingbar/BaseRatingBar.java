@@ -7,7 +7,6 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -34,6 +33,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private int mPadding = 0;
     private float mRating = -1;
     private float mPreviousRating = 0;
+    private boolean mIsTouchable = true;
     private boolean mClearRatingEnabled = true;
 
     private float mStartX;
@@ -243,6 +243,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (!isTouchable()) {
+            return false;
+        }
+
         float eventX = event.getX();
         float eventY = event.getY();
         switch (event.getAction()) {
@@ -285,14 +289,13 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     private void handleClickEvent(float eventX) {
-        Log.d(TAG, "handleClickEvent: ");
         for (PartialView partialView : mPartialViews) {
             if (!isPositionInRatingView(eventX, partialView)) {
                 continue;
             }
 
             int rating = partialView.getId();
-            if (mPreviousRating == rating && mClearRatingEnabled) {
+            if (mPreviousRating == rating && isClearRatingEnabled()) {
                 setRating(0);
             } else {
                 setRating(rating);
@@ -320,7 +323,19 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mOnRatingChangeListener = onRatingChangeListener;
     }
 
+    public boolean isTouchable() {
+        return mIsTouchable;
+    }
+
+    public void setTouchable(boolean touchable) {
+        this.mIsTouchable = touchable;
+    }
+
     public void setClearRatingEnabled(boolean enabled) {
         this.mClearRatingEnabled = enabled;
+    }
+
+    public boolean isClearRatingEnabled() {
+        return mClearRatingEnabled;
     }
 }
