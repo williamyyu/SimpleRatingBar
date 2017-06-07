@@ -17,7 +17,7 @@ Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com
 
 ## What's New (v1.2)
 - Support float rating  
-  Now you can set a float rating like 3.5, 2.3, 4.7, etc.
+  Now you can set a float rating like 3.5, 2.3, 4.7, etc., but you only need to provide two images: filled and empty, and I will auto processing your image to support float showing!
 - Add touchable setting
 - Add ClearRatingEnabled setting
 - Start width and height setting. (contributed by [zhangruize](https://github.com/zhangruize))  
