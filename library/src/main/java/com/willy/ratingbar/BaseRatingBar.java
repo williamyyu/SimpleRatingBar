@@ -7,6 +7,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -27,6 +28,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     public static final String TAG = "SimpleRatingBar";
 
     private static final int MAX_CLICK_DISTANCE = 5;
+    private static final int MAX_CLICK_DURATION = 200;
 
     private int mNumStars;
     private int mPadding = 0;
@@ -253,7 +255,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 handleMoveEvent(eventX);
                 break;
             case MotionEvent.ACTION_UP:
-                if (!isClickEvent(mStartX, eventX, mStartY, eventY)) {
+                if (!isClickEvent(mStartX, mStartY, event)) {
                     return false;
                 }
 
@@ -282,6 +284,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     private void handleClickEvent(float eventX) {
+        Log.d(TAG, "handleClickEvent: ");
         for (PartialView partialView : mPartialViews) {
             if (!isPositionInRatingView(eventX, partialView)) {
                 continue;
@@ -301,9 +304,14 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         return eventX > ratingView.getLeft() && eventX < ratingView.getRight();
     }
 
-    private boolean isClickEvent(float startX, float endX, float startY, float endY) {
-        float differenceX = Math.abs(startX - endX);
-        float differenceY = Math.abs(startY - endY);
+    private boolean isClickEvent(float startX, float startY, MotionEvent event) {
+        float duration = event.getEventTime() - event.getDownTime();
+        if (duration > MAX_CLICK_DURATION) {
+            return false;
+        }
+
+        float differenceX = Math.abs(startX - event.getX());
+        float differenceY = Math.abs(startY - event.getY());
         return !(differenceX > MAX_CLICK_DISTANCE || differenceY > MAX_CLICK_DISTANCE);
     }
 
