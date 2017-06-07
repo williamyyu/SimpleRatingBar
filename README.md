@@ -15,6 +15,13 @@ Current we already have three RatingBars :
 ![](images/demo.gif)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
+## What's New (v1.2)
+- Support float rating  
+  Now you can set a float rating like 3.5, 2.3, 4.7, etc.
+- Add touchable setting
+- Add ClearRatingEnabled setting
+- Start width and height setting. (contributed by [zhangruize](https://github.com/zhangruize))  
+
 ## Feature
 - Support use touch to change rating
 - Custom drawable's padding
@@ -36,7 +43,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.1.2'
+    compile 'com.github.ome450901:SimpleRatingBar:1.2'
 }
 ```
 
@@ -51,6 +58,8 @@ dependencies {
         rb:numStars="3"
         rb:rating="2"
         rb:starPadding="15"
+        rb:touchable="true"
+        rb:clearratingEnabled="true"
         rb:drawableEmpty="@drawable/start_empty"
         rb:drawableFilled="@drawable/star_filled">
 </com.willy.ratingbar.ScaleRatingBar>
@@ -62,6 +71,8 @@ ScaleRatingBar ratingBar = new ScaleRatingBar(this);
 ratingBar.setNumStars(5);
 ratingBar.setRating(3);
 ratingBar.setStarPadding(10);
+ratingbar.setTouchable(true);
+ratingbar.setClearRatingEnabled(true);
 ratingBar.setEmptyDrawableRes(R.drawable.start_empty);
 ratingBar.setFilledDrawableRes(R.drawable.start_empty);
 ratingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
@@ -80,9 +91,33 @@ ratingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
 >You can follow [ScaleRatingBar](https://github.com/ome450901/SimpleRatingBar/blob/master/library/src/main/java/com/willy/ratingbar/ScaleRatingBar.java) to implement your own class.
 
 ## Todo
-- Support float rating
 - Implement some other animations
 - Find a better way to implement animation
 
 ## About Me
-Welcome to follow me on [Medium](https://medium.com/@ome450901).
+Follow me at [Medium](https://medium.com/@ome450901).
+
+## License
+```
+MIT License
+
+Copyright (c) 2017 WillyYu
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
