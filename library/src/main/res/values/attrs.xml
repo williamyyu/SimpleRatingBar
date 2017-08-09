@@ -9,5 +9,7 @@
         <attr name="drawableFilled" format="reference" />
         <attr name="touchable" format="boolean" />
         <attr name="clearRatingEnabled" format="boolean" />
+        <attr name="starWidth" format="dimension" />
+        <attr name="starHeight" format="dimension" />
     </declare-styleable>
 </resources>

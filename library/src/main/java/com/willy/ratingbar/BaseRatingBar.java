@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -31,6 +32,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     private int mNumStars;
     private int mPadding = 0;
+    private int mStarWidth;
+    private int mStarHeight;
     private float mRating = -1;
     private float mPreviousRating = 0;
     private boolean mIsTouchable = true;
@@ -67,6 +70,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         float rating = typedArray.getFloat(R.styleable.RatingBarAttributes_rating, mRating);
         mNumStars = typedArray.getInt(R.styleable.RatingBarAttributes_numStars, mNumStars);
         mPadding = typedArray.getInt(R.styleable.RatingBarAttributes_starPadding, mPadding);
+        mStarWidth = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starWidth, 0);
+        mStarHeight = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starHeight, 0);
         mEmptyDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableEmpty);
         mFilledDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableFilled);
         mIsTouchable = typedArray.getBoolean(R.styleable.RatingBarAttributes_touchable, mIsTouchable);
@@ -101,10 +106,14 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private void initRatingView() {
         mPartialViews = new ArrayList<>();
 
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                mStarWidth == 0 ? LayoutParams.WRAP_CONTENT : mStarWidth,
+                mStarHeight == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : mStarHeight);
+
         for (int i = 1; i <= mNumStars; i++) {
             PartialView partialView = getPartialView(i, mFilledDrawable, mEmptyDrawable);
             mPartialViews.add(partialView);
-            addView(partialView);
+            addView(partialView, params);
         }
     }
 
