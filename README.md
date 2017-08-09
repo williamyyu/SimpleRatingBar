@@ -1,3 +1,6 @@
+>Currently, I am fulfilling my mandatory military service, but I will try to free myself to fix issues.  
+Thanks for all responses!
+
 # SimpleRatingBar
 [![JitPack](https://jitpack.io/v/ome450901/SimpleRatingBar.svg)](https://jitpack.io/#ome450901/SimpleRatingBar)
 
