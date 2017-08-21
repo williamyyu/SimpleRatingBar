@@ -42,12 +42,20 @@ public class PartialView extends RelativeLayout {
     }
 
     public void setFilledDrawable(Drawable drawable) {
-        ClipDrawable clipDrawable = new ClipDrawable(drawable, Gravity.LEFT, ClipDrawable.HORIZONTAL);
+        if (drawable.getConstantState() == null) {
+            return;
+        }
+
+        ClipDrawable clipDrawable = new ClipDrawable(drawable.getConstantState().newDrawable(), Gravity.START, ClipDrawable.HORIZONTAL);
         mFilledView.setImageDrawable(clipDrawable);
     }
 
     public void setEmptyDrawable(Drawable drawable) {
-        ClipDrawable clipDrawable = new ClipDrawable(drawable, Gravity.RIGHT, ClipDrawable.HORIZONTAL);
+        if (drawable.getConstantState() == null) {
+            return;
+        }
+
+        ClipDrawable clipDrawable = new ClipDrawable(drawable.getConstantState().newDrawable(), Gravity.END, ClipDrawable.HORIZONTAL);
         mEmptyView.setImageDrawable(clipDrawable);
     }
 
