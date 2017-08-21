@@ -1,6 +1,3 @@
->Currently, I am fulfilling my mandatory military service, but I will try to free myself to fix issues.  
-Thanks for all responses!
-
 # SimpleRatingBar
 [![JitPack](https://jitpack.io/v/ome450901/SimpleRatingBar.svg)](https://jitpack.io/#ome450901/SimpleRatingBar)
 
@@ -19,14 +16,15 @@ Current we already have three RatingBars :
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.2)
+## What's New (v1.2.1)
+- Fix stars disappear bug . 
+
+## Feature
 - Support float rating  
   Now you can set a float rating like 3.5, 2.3, 4.7, etc., but you only need to provide two images: `filled` and `empty`, and Library will auto processes your images to support float showing!
 - Add touchable setting
 - Add ClearRatingEnabled setting
-- Start width and height setting. (contributed by [zhangruize](https://github.com/zhangruize))  
-
-## Feature
+- Stars width and height setting. (contributed by [zhangruize](https://github.com/zhangruize))  
 - Support use touch to change rating
 - Custom drawable's padding
 - Custom your empty and filled drawable
@@ -61,6 +59,8 @@ dependencies {
         android:layout_height="wrap_content"
         rb:numStars="3"
         rb:rating="2"
+        rb:starWidth="30dp"
+        rb:starHeight="30dp"
         rb:starPadding="15"
         rb:touchable="true"
         rb:clearratingEnabled="true"
