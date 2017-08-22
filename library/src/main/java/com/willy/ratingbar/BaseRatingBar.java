@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -265,7 +266,9 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 mStartX = eventX;
                 mStartY = eventY;
                 mPreviousRating = mRating;
-                handleMoveEvent(eventX);
+
+//                Avoid rating changes two times when is a click event.
+//                handleMoveEvent(eventX);
                 break;
             case MotionEvent.ACTION_MOVE:
                 handleMoveEvent(eventX);
@@ -283,7 +286,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     private void handleMoveEvent(float eventX) {
         for (PartialView partialView : mPartialViews) {
-            if (eventX < partialView.getWidth() / 2f) {
+            if (eventX < partialView.getWidth() / 10f) {
                 setRating(0);
                 return;
             }
@@ -292,7 +295,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 continue;
             }
 
-            int rating = partialView.getId();
+            DecimalFormat df = new DecimalFormat("#.#");
+            float percent = 1 - ((eventX - partialView.getLeft()) / partialView.getWidth());
+            float rating = Float.parseFloat(df.format(partialView.getId() - percent));
+
             if (mRating != rating) {
                 setRating(rating);
             }
@@ -305,7 +311,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 continue;
             }
 
-            int rating = partialView.getId();
+            float rating = partialView.getId();
+
             if (mPreviousRating == rating && isClearRatingEnabled()) {
                 setRating(0);
             } else {
