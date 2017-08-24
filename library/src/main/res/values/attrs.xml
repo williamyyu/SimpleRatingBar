@@ -11,5 +11,6 @@
         <attr name="clearRatingEnabled" format="boolean" />
         <attr name="starWidth" format="dimension" />
         <attr name="starHeight" format="dimension" />
+        <attr name="stepSize" format="float" />
     </declare-styleable>
 </resources>

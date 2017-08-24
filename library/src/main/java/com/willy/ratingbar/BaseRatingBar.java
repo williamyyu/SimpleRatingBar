@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.FloatRange;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -31,11 +32,14 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private static final int MAX_CLICK_DISTANCE = 5;
     private static final int MAX_CLICK_DURATION = 200;
 
+    private final DecimalFormat mDecimalFormat = new DecimalFormat("#.##");
+
     private int mNumStars;
     private int mPadding = 0;
     private int mStarWidth;
     private int mStarHeight;
     private float mRating = -1;
+    private float mStepSize = 1f;
     private float mPreviousRating = 0;
     private boolean mIsTouchable = true;
     private boolean mClearRatingEnabled = true;
@@ -73,6 +77,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mPadding = typedArray.getInt(R.styleable.RatingBarAttributes_starPadding, mPadding);
         mStarWidth = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starWidth, 0);
         mStarHeight = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starHeight, 0);
+        mStepSize = typedArray.getFloat(R.styleable.RatingBarAttributes_stepSize, mStepSize);
         mEmptyDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableEmpty);
         mFilledDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableFilled);
         mIsTouchable = typedArray.getBoolean(R.styleable.RatingBarAttributes_touchable, mIsTouchable);
@@ -100,6 +105,12 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
         if (mFilledDrawable == null) {
             mFilledDrawable = ContextCompat.getDrawable(getContext(), R.drawable.filled);
+        }
+
+        if (mStepSize > 1.0f) {
+            mStepSize = 1.0f;
+        } else if (mStepSize < 0.1f) {
+            mStepSize = 0.1f;
         }
 
     }
@@ -295,14 +306,18 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 continue;
             }
 
-            DecimalFormat df = new DecimalFormat("#.#");
-            float percent = 1 - ((eventX - partialView.getLeft()) / partialView.getWidth());
-            float rating = Float.parseFloat(df.format(partialView.getId() - percent));
+            float rating = calculateRating(eventX, partialView);
 
             if (mRating != rating) {
                 setRating(rating);
             }
         }
+    }
+
+    private float calculateRating(float eventX, PartialView partialView) {
+        float ratioOfView = Float.parseFloat(mDecimalFormat.format((eventX - partialView.getLeft()) / partialView.getWidth()));
+        float steps = Math.round(ratioOfView / mStepSize) * mStepSize;
+        return Float.parseFloat(mDecimalFormat.format(partialView.getId() - (1 - steps)));
     }
 
     private void handleClickEvent(float eventX) {
@@ -355,5 +370,13 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     public boolean isClearRatingEnabled() {
         return mClearRatingEnabled;
+    }
+
+    public float getStepSize() {
+        return mStepSize;
+    }
+
+    public void setStepSize(@FloatRange(from = 0.1, to = 1.0) float stepSize) {
+        this.mStepSize = stepSize;
     }
 }
