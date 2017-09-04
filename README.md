@@ -16,8 +16,10 @@ Current we already have three RatingBars :
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.2.1)
-- Fix stars disappear bug . 
+## What's New (v1.3)
+- Fix stars disappear bug.
+- Fix setNumStars disappear bug.
+- Implement step size setting(range from 0.1 to 1.0).
 
 ## Feature
 - Support float rating  
@@ -45,7 +47,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.2.1'
+    compile 'com.github.ome450901:SimpleRatingBar:1.3'
 }
 ```
 
@@ -62,8 +64,9 @@ dependencies {
         rb:starWidth="30dp"
         rb:starHeight="30dp"
         rb:starPadding="15"
+        rb:stepSize="0.5"
         rb:touchable="true"
-        rb:clearratingEnabled="true"
+        rb:clearRatingEnabled="true"
         rb:drawableEmpty="@drawable/start_empty"
         rb:drawableFilled="@drawable/star_filled">
 </com.willy.ratingbar.ScaleRatingBar>
@@ -75,6 +78,7 @@ ScaleRatingBar ratingBar = new ScaleRatingBar(this);
 ratingBar.setNumStars(5);
 ratingBar.setRating(3);
 ratingBar.setStarPadding(10);
+ratingBar.setStepSize(0.5f);
 ratingbar.setTouchable(true);
 ratingbar.setClearRatingEnabled(true);
 ratingBar.setEmptyDrawableRes(R.drawable.start_empty);
