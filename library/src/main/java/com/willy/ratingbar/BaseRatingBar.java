@@ -14,8 +14,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by willy on 2017/5/5.
@@ -32,7 +35,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private static final int MAX_CLICK_DISTANCE = 5;
     private static final int MAX_CLICK_DURATION = 200;
 
-    private final DecimalFormat mDecimalFormat = new DecimalFormat("#.##");
+    private final DecimalFormat mDecimalFormat;
 
     private int mNumStars;
     private int mPadding = 0;
@@ -83,6 +86,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mIsTouchable = typedArray.getBoolean(R.styleable.RatingBarAttributes_touchable, mIsTouchable);
         mClearRatingEnabled = typedArray.getBoolean(R.styleable.RatingBarAttributes_clearRatingEnabled, mClearRatingEnabled);
         typedArray.recycle();
+
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        mDecimalFormat = new DecimalFormat("#.##", symbols);
 
         verifyParamsValue();
 
