@@ -39,6 +39,7 @@ public class PartialView extends RelativeLayout {
         mEmptyView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         addView(mFilledView);
         addView(mEmptyView);
+        setEmpty();
     }
 
     public void setFilledDrawable(Drawable drawable) {

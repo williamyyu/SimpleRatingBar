@@ -36,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textview_main_baseratingbar_title"
         rb:numStars="7"
         rb:rating="2.5"
-        rb:starPadding="5" />
+        rb:starPadding="5dp" />
 
     <TextView
         android:id="@+id/textview_main_scaleratingbar_title"
@@ -62,7 +62,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_main_scaleratingbar_title"
-        rb:starPadding="20" />
+        rb:starPadding="10dp"
+        rb:stepSize="0.5"/>
 
     <TextView
         android:id="@+id/textview_main_rotationratingbar_title"
