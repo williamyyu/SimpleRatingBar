@@ -4,7 +4,7 @@
     <declare-styleable name="RatingBarAttributes">
         <attr name="numStars" format="integer" />
         <attr name="rating" format="float" />
-        <attr name="starPadding" format="integer" />
+        <attr name="starPadding" format="dimension" />
         <attr name="drawableEmpty" format="reference" />
         <attr name="drawableFilled" format="reference" />
         <attr name="touchable" format="boolean" />
