@@ -16,10 +16,11 @@ Current we already have three RatingBars :
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.3)
+## What's New (v1.3.1)
+- Implement step size setting(range from 0.1 to 1.0).
 - Fix stars disappear bug.
 - Fix setNumStars disappear bug.
-- Implement step size setting(range from 0.1 to 1.0).
+- Fix separator in decimal with locale bug.
 
 ## Feature
 - Support float rating  
@@ -47,7 +48,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.3'
+    compile 'com.github.ome450901:SimpleRatingBar:1.3.1'
 }
 ```
 
