@@ -81,8 +81,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mStarWidth = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starWidth, 0);
         mStarHeight = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starHeight, 0);
         mStepSize = typedArray.getFloat(R.styleable.RatingBarAttributes_stepSize, mStepSize);
-        mEmptyDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableEmpty);
-        mFilledDrawable = typedArray.getDrawable(R.styleable.RatingBarAttributes_drawableFilled);
+        mEmptyDrawable = typedArray.hasValue(R.styleable.RatingBarAttributes_drawableEmpty) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.RatingBarAttributes_drawableEmpty, View.NO_ID)) : null;
+        mFilledDrawable = typedArray.hasValue(R.styleable.RatingBarAttributes_drawableFilled) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.RatingBarAttributes_drawableFilled, View.NO_ID)) : null;
         mIsTouchable = typedArray.getBoolean(R.styleable.RatingBarAttributes_touchable, mIsTouchable);
         mClearRatingEnabled = typedArray.getBoolean(R.styleable.RatingBarAttributes_clearRatingEnabled, mClearRatingEnabled);
         typedArray.recycle();
