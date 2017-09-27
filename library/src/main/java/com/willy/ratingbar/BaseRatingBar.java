@@ -333,7 +333,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 continue;
             }
 
-            float rating = partialView.getId();
+            float rating = mStepSize == 1 ? partialView.getId() : calculateRating(eventX, partialView);
 
             if (mPreviousRating == rating && isClearRatingEnabled()) {
                 setRating(0);
