@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         final BaseRatingBar baseRatingBar = (BaseRatingBar) findViewById(R.id.baseratingbar_main);
-        final ScaleRatingBar scaleRatingBar = (ScaleRatingBar) findViewById(R.id.scaleratingbar_main);
+        final ScaleRatingBar scaleRatingBar = (ScaleRatingBar) findViewById(R.id.scaleRatingBar);
         final RotationRatingBar rotationRatingBar = (RotationRatingBar) findViewById(R.id.rotationratingbar_main);
 
         baseRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {

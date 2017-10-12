@@ -53,7 +53,7 @@
 
 
     <com.willy.ratingbar.ScaleRatingBar
-        android:id="@+id/scaleratingbar_main"
+        android:id="@+id/scaleRatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -76,7 +76,7 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scaleratingbar_main" />
+        app:layout_constraintTop_toBottomOf="@+id/scaleRatingBar" />
 
     <com.willy.ratingbar.RotationRatingBar
         android:id="@+id/rotationratingbar_main"
