@@ -52,7 +52,7 @@ public class ScaleRatingBar extends BaseRatingBar {
         int delay = 0;
 
         for (final PartialView partialView : mPartialViews) {
-            final int ratingViewId = partialView.getId();
+            final int ratingViewId = (int) partialView.getTag();
             final double maxIntOfRating = Math.ceil(rating);
 
             if (ratingViewId > maxIntOfRating) {
