@@ -16,13 +16,14 @@ Current we already have three RatingBars :
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.3.1)
-- Implement step size setting(range from 0.1 to 1.0).
-- Fix stars disappear bug.
-- Fix setNumStars disappear bug.
-- Fix separator in decimal with locale bug.
+## What's New (v1.3.2)
+- Fix fillRatingBar method bug when RatingBar use in RecyclerView.
+- Allow half star through click event. (contributed by [ANPez](https://github.com/ANPez))
+- Load drawables from XML using ContextCompat to allow vectordrawables. (contributed by [ANPez](https://github.com/ANPez))
+- Implement new EntryActivity in demo project
 
 ## Feature
+- Support step size setting(range from 0.1 to 1.0).
 - Support float rating  
   Now you can set a float rating like 3.5, 2.3, 4.7, etc., but you only need to provide two images: `filled` and `empty`, and Library will auto processes your images to support float showing!
 - Add touchable setting
@@ -48,7 +49,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.3.1'
+    compile 'com.github.ome450901:SimpleRatingBar:1.3.2'
 }
 ```
 
@@ -57,7 +58,7 @@ dependencies {
 ```xml
 <com.willy.ratingbar.ScaleRatingBar
         xmlns:rb="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/simpleRatingBar5"
+        android:id="@+id/simpleRatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         rb:numStars="3"
