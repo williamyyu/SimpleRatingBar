@@ -298,6 +298,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 handleClickEvent(eventX);
         }
 
+        getParent().requestDisallowInterceptTouchEvent(true);
         return true;
     }
 
