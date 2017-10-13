@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.ScaleRatingBar;
 
 import java.util.ArrayList;
@@ -25,8 +24,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         mContext = context;
         list = new ArrayList<>();
 
-        for (int i = 1; i < 3; i++) {
-            list.add(i);
+        for (int i = 1; i < 10; i++) {
+            list.add(i % 6);
         }
     }
 
@@ -38,7 +37,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        holder.scaleRatingBar.setRating(3);
+        holder.ratingBar.setRating(list.get(position));
     }
 
     @Override
@@ -48,13 +47,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private BaseRatingBar baseRatingBar;
-        private ScaleRatingBar scaleRatingBar;
+        private ScaleRatingBar ratingBar;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-//            baseRatingBar = (BaseRatingBar) itemView.findViewById(R.id.ratingBar);
-            scaleRatingBar = (ScaleRatingBar) itemView.findViewById(R.id.ratingBar);
+//            ratingBar = (BaseRatingBar) itemView.findViewById(R.id.ratingBar);
+//            ratingBar = (ScaleRatingBar) itemView.findViewById(R.id.ratingBar);
+            ratingBar = (ScaleRatingBar) itemView.findViewById(R.id.ratingBar);
         }
     }
 }

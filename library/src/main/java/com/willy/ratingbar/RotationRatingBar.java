@@ -1,7 +1,6 @@
 package com.willy.ratingbar;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.animation.Animation;
@@ -11,9 +10,7 @@ import android.view.animation.AnimationUtils;
  * Created by nappannda on 2017/05/16.
  */
 
-public class RotationRatingBar extends BaseRatingBar {
-
-    private static Handler sUiHandler = new Handler();
+public class RotationRatingBar extends AnimationRatingBar {
 
     public RotationRatingBar(Context context) {
         super(context);
@@ -30,26 +27,27 @@ public class RotationRatingBar extends BaseRatingBar {
     @Override
     protected void emptyRatingBar() {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-        sUiHandler.removeCallbacksAndMessages(null);
+//        sUiHandler.removeCallbacksAndMessages(null);
 
-        int delay = 0;
+        mDelay = 0;
+        mStopFillingFlag = true;
 
         for (final PartialView partialView : mPartialViews) {
-            new Handler().postDelayed(new Runnable() {
+            mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     partialView.setEmpty();
                 }
-            }, delay += 5);
+            }, mDelay += 5);
         }
     }
 
     @Override
     protected void fillRatingBar(final float rating) {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-        sUiHandler.removeCallbacksAndMessages(null);
+//        sUiHandler.removeCallbacksAndMessages(null);
 
-        int delay = 0;
+        mDelay = 0;
         for (final PartialView partialView : mPartialViews) {
             final int ratingViewId = (int) partialView.getTag();
             final double maxIntOfRating = Math.ceil(rating);
@@ -59,9 +57,13 @@ public class RotationRatingBar extends BaseRatingBar {
                 continue;
             }
 
-            sUiHandler.postDelayed(new Runnable() {
+            mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    if (mStopFillingFlag) {
+                        return;
+                    }
+
                     if (ratingViewId == maxIntOfRating) {
                         partialView.setPartialFilled(rating);
                     } else {
@@ -74,7 +76,7 @@ public class RotationRatingBar extends BaseRatingBar {
                     }
 
                 }
-            }, delay += 15);
+            }, mDelay += 15);
         }
     }
 }
