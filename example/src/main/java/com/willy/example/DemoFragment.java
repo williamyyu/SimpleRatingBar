@@ -1,27 +1,35 @@
 package com.willy.example;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.RotationRatingBar;
 import com.willy.ratingbar.ScaleRatingBar;
 
-public class MainActivity extends AppCompatActivity {
+public class DemoFragment extends Fragment {
 
     public static final String TAG = "SimpleRatingBar";
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_demo, container, false);
+    }
 
-        final BaseRatingBar baseRatingBar = (BaseRatingBar) findViewById(R.id.baseratingbar_main);
-        final ScaleRatingBar scaleRatingBar = (ScaleRatingBar) findViewById(R.id.scaleratingbar_main);
-        final RotationRatingBar rotationRatingBar = (RotationRatingBar) findViewById(R.id.rotationratingbar_main);
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        final BaseRatingBar baseRatingBar = (BaseRatingBar) view.findViewById(R.id.baseratingbar_main);
+        final ScaleRatingBar scaleRatingBar = (ScaleRatingBar) view.findViewById(R.id.scaleRatingBar);
+        final RotationRatingBar rotationRatingBar = (RotationRatingBar) view.findViewById(R.id.rotationratingbar_main);
 
         baseRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
@@ -44,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button addRatingButton = (Button) findViewById(R.id.button_main_add_rating);
+        Button addRatingButton = (Button) view.findViewById(R.id.button_main_add_rating);
         addRatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

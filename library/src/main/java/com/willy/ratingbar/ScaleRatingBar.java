@@ -1,7 +1,6 @@
 package com.willy.ratingbar;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.animation.Animation;
@@ -11,9 +10,7 @@ import android.view.animation.AnimationUtils;
  * Created by willy on 2017/5/5.
  */
 
-public class ScaleRatingBar extends BaseRatingBar {
-
-    private static Handler sUiHandler = new Handler();
+public class ScaleRatingBar extends AnimationRatingBar {
 
     public ScaleRatingBar(Context context) {
         super(context);
@@ -27,32 +24,34 @@ public class ScaleRatingBar extends BaseRatingBar {
         super(context, attrs, defStyleAttr);
     }
 
-
     @Override
     protected void emptyRatingBar() {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-        sUiHandler.removeCallbacksAndMessages(null);
+//        mHandler.removeCallbacksAndMessages(null);
 
-        int delay = 0;
+        mDelay = 0;
+        mStopFillingFlag = true;
+
         for (final PartialView view : mPartialViews) {
-            sUiHandler.postDelayed(new Runnable() {
+            mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     view.setEmpty();
                 }
-            }, delay += 5);
+            }, mDelay += 5);
         }
     }
 
     @Override
     protected void fillRatingBar(final float rating) {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-        sUiHandler.removeCallbacksAndMessages(null);
+//        mHandler.removeCallbacksAndMessages(null);
 
-        int delay = 0;
+        mDelay = 0;
+        mStopFillingFlag = false;
 
         for (final PartialView partialView : mPartialViews) {
-            final int ratingViewId = partialView.getId();
+            final int ratingViewId = (int) partialView.getTag();
             final double maxIntOfRating = Math.ceil(rating);
 
             if (ratingViewId > maxIntOfRating) {
@@ -60,9 +59,13 @@ public class ScaleRatingBar extends BaseRatingBar {
                 continue;
             }
 
-            sUiHandler.postDelayed(new Runnable() {
+            mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
+                    if (mStopFillingFlag) {
+                        return;
+                    }
+
                     if (ratingViewId == maxIntOfRating) {
                         partialView.setPartialFilled(rating);
                     } else {
@@ -75,10 +78,14 @@ public class ScaleRatingBar extends BaseRatingBar {
                         partialView.startAnimation(scaleUp);
                         partialView.startAnimation(scaleDown);
                     }
-
                 }
-            }, delay += 15);
+            }, mDelay += 15);
         }
+    }
+
+    public void test() {
+        fillRatingBar(10);
+        emptyRatingBar();
     }
 }
 

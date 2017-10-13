@@ -15,10 +15,8 @@ import android.widget.LinearLayout;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by willy on 2017/5/5.
@@ -138,7 +136,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     private PartialView getPartialView(final int ratingViewId, Drawable filledDrawable, Drawable emptyDrawable) {
         PartialView partialView = new PartialView(getContext());
-        partialView.setId(ratingViewId);
+//        partialView.setId(ratingViewId);
+        partialView.setTag(ratingViewId);
         partialView.setPadding(mPadding, mPadding, mPadding, mPadding);
         partialView.setFilledDrawable(filledDrawable);
         partialView.setEmptyDrawable(emptyDrawable);
@@ -158,7 +157,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
      */
     protected void fillRatingBar(final float rating) {
         for (PartialView partialView : mPartialViews) {
-            int ratingViewId = partialView.getId();
+            int ratingViewId = (int) partialView.getTag();
             double maxIntOfRating = Math.ceil(rating);
 
             if (ratingViewId > maxIntOfRating) {
@@ -299,6 +298,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 handleClickEvent(eventX);
         }
 
+        getParent().requestDisallowInterceptTouchEvent(true);
         return true;
     }
 
@@ -324,7 +324,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private float calculateRating(float eventX, PartialView partialView) {
         float ratioOfView = Float.parseFloat(mDecimalFormat.format((eventX - partialView.getLeft()) / partialView.getWidth()));
         float steps = Math.round(ratioOfView / mStepSize) * mStepSize;
-        return Float.parseFloat(mDecimalFormat.format(partialView.getId() - (1 - steps)));
+        return Float.parseFloat(mDecimalFormat.format((int) partialView.getTag() - (1 - steps)));
     }
 
     private void handleClickEvent(float eventX) {
@@ -333,7 +333,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 continue;
             }
 
-            float rating = mStepSize == 1 ? partialView.getId() : calculateRating(eventX, partialView);
+            float rating = mStepSize == 1 ? (int) partialView.getTag() : calculateRating(eventX, partialView);
 
             if (mPreviousRating == rating && isClearRatingEnabled()) {
                 setRating(0);
