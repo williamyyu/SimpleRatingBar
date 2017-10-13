@@ -24,7 +24,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         mContext = context;
         list = new ArrayList<>();
 
-        for (int i = 1; i < 10; i++) {
+        for (int i = 1; i < 20; i++) {
             list.add(i % 6);
         }
     }
