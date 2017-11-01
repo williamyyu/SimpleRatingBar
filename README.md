@@ -65,7 +65,7 @@ dependencies {
         rb:rating="2"
         rb:starWidth="30dp"
         rb:starHeight="30dp"
-        rb:starPadding="15"
+        rb:starPadding="15dp"
         rb:stepSize="0.5"
         rb:touchable="true"
         rb:clearRatingEnabled="true"
