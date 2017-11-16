@@ -16,7 +16,8 @@ Current we already have three RatingBars :
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.3.2)
+## What's New (v1.3.3)
+- Implement SavedState to restore RatingBar state. (contributed by [harshsharma94](https://github.com/harshsharma94))
 - Fix fillRatingBar method bug when RatingBar use in RecyclerView.
 - Allow half star through click event. (contributed by [ANPez](https://github.com/ANPez))
 - Load drawables from XML using ContextCompat to allow vectordrawables. (contributed by [ANPez](https://github.com/ANPez))
@@ -49,7 +50,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.3.2'
+    compile 'com.github.ome450901:SimpleRatingBar:1.3.3'
 }
 ```
 
@@ -65,7 +66,7 @@ dependencies {
         rb:rating="2"
         rb:starWidth="30dp"
         rb:starHeight="30dp"
-        rb:starPadding="15"
+        rb:starPadding="15dp"
         rb:stepSize="0.5"
         rb:touchable="true"
         rb:clearRatingEnabled="true"
