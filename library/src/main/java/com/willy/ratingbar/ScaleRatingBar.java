@@ -82,10 +82,5 @@ public class ScaleRatingBar extends AnimationRatingBar {
             }, mDelay += 15);
         }
     }
-
-    public void test() {
-        fillRatingBar(10);
-        emptyRatingBar();
-    }
 }
 
