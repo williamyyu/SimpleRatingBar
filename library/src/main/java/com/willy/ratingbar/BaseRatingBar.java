@@ -43,7 +43,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private float mRating = -1;
     private float mStepSize = 1f;
     private float mPreviousRating = 0;
-    private boolean mIsTouchable = true;
+
+    private boolean mIsIndicator = false;
+    private boolean mIsScrollable = true;
+    private boolean mIsClickable = true;
     private boolean mClearRatingEnabled = true;
 
     private float mStartX;
@@ -82,7 +85,9 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mStepSize = typedArray.getFloat(R.styleable.RatingBarAttributes_stepSize, mStepSize);
         mEmptyDrawable = typedArray.hasValue(R.styleable.RatingBarAttributes_drawableEmpty) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.RatingBarAttributes_drawableEmpty, View.NO_ID)) : null;
         mFilledDrawable = typedArray.hasValue(R.styleable.RatingBarAttributes_drawableFilled) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.RatingBarAttributes_drawableFilled, View.NO_ID)) : null;
-        mIsTouchable = typedArray.getBoolean(R.styleable.RatingBarAttributes_touchable, mIsTouchable);
+        mIsIndicator = typedArray.getBoolean(R.styleable.RatingBarAttributes_isIndicator, mIsIndicator);
+        mIsScrollable = typedArray.getBoolean(R.styleable.RatingBarAttributes_scrollable, mIsScrollable);
+        mIsClickable = typedArray.getBoolean(R.styleable.RatingBarAttributes_clickable, mIsClickable);
         mClearRatingEnabled = typedArray.getBoolean(R.styleable.RatingBarAttributes_clearRatingEnabled, mClearRatingEnabled);
         typedArray.recycle();
 
@@ -273,7 +278,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!isTouchable()) {
+        if (isIndicator()) {
             return false;
         }
 
@@ -284,15 +289,16 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 mStartX = eventX;
                 mStartY = eventY;
                 mPreviousRating = mRating;
-
-//                Avoid rating changes two times when is a click event.
-//                handleMoveEvent(eventX);
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (!isScrollable()) {
+                    return false;
+                }
+
                 handleMoveEvent(eventX);
                 break;
             case MotionEvent.ACTION_UP:
-                if (!isClickEvent(mStartX, mStartY, event)) {
+                if (!isClickEvent(mStartX, mStartY, event) || !isClickable()) {
                     return false;
                 }
 
@@ -364,12 +370,28 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mOnRatingChangeListener = onRatingChangeListener;
     }
 
-    public boolean isTouchable() {
-        return mIsTouchable;
+    public boolean isIndicator() {
+        return mIsIndicator;
     }
 
-    public void setTouchable(boolean touchable) {
-        this.mIsTouchable = touchable;
+    public void setIsIndicator(boolean indicator) {
+        mIsIndicator = indicator;
+    }
+
+    public boolean isScrollable() {
+        return mIsScrollable;
+    }
+
+    public void setScrollable(boolean scrollable) {
+        mIsScrollable = scrollable;
+    }
+
+    public boolean isClickable() {
+        return mIsClickable;
+    }
+
+    public void setClickable(boolean clickable) {
+        this.mIsClickable = clickable;
     }
 
     public void setClearRatingEnabled(boolean enabled) {
