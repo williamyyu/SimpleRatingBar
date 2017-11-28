@@ -1,6 +1,8 @@
 package com.willy.ratingbar;
 
 import android.content.Context;
+import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.animation.Animation;
@@ -11,6 +13,9 @@ import android.view.animation.AnimationUtils;
  */
 
 public class ScaleRatingBar extends AnimationRatingBar {
+
+    // Control animation speed
+    private static final long ANIMATION_DELAY = 15;
 
     public ScaleRatingBar(Context context) {
         super(context);
@@ -27,28 +32,27 @@ public class ScaleRatingBar extends AnimationRatingBar {
     @Override
     protected void emptyRatingBar() {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-//        mHandler.removeCallbacksAndMessages(null);
+        if (mRunnable != null) {
+            mHandler.removeCallbacksAndMessages(mRunnableToken);
+        }
 
-        mDelay = 0;
-        mStopFillingFlag = true;
-
+        long delay = 0;
         for (final PartialView view : mPartialViews) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     view.setEmpty();
                 }
-            }, mDelay += 5);
+            }, delay += 5);
         }
     }
 
     @Override
     protected void fillRatingBar(final float rating) {
         // Need to remove all previous runnable to prevent emptyRatingBar and fillRatingBar out of sync
-//        mHandler.removeCallbacksAndMessages(null);
-
-        mDelay = 0;
-        mStopFillingFlag = false;
+        if (mRunnable != null) {
+            mHandler.removeCallbacksAndMessages(mRunnableToken);
+        }
 
         for (final PartialView partialView : mPartialViews) {
             final int ratingViewId = (int) partialView.getTag();
@@ -59,28 +63,32 @@ public class ScaleRatingBar extends AnimationRatingBar {
                 continue;
             }
 
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mStopFillingFlag) {
-                        return;
-                    }
+            mRunnable = getAnimationRunnable(rating, partialView, ratingViewId, maxIntOfRating);
 
-                    if (ratingViewId == maxIntOfRating) {
-                        partialView.setPartialFilled(rating);
-                    } else {
-                        partialView.setFilled();
-                    }
-
-                    if (ratingViewId == rating) {
-                        Animation scaleUp = AnimationUtils.loadAnimation(getContext(), R.anim.scale_up);
-                        Animation scaleDown = AnimationUtils.loadAnimation(getContext(), R.anim.scale_down);
-                        partialView.startAnimation(scaleUp);
-                        partialView.startAnimation(scaleDown);
-                    }
-                }
-            }, mDelay += 15);
+            long timeMillis = SystemClock.uptimeMillis() + ANIMATION_DELAY;
+            mHandler.postAtTime(mRunnable, mRunnableToken, timeMillis);
         }
+    }
+
+    @NonNull
+    private Runnable getAnimationRunnable(final float rating, final PartialView partialView, final int ratingViewId, final double maxIntOfRating) {
+        return new Runnable() {
+            @Override
+            public void run() {
+                if (ratingViewId == maxIntOfRating) {
+                    partialView.setPartialFilled(rating);
+                } else {
+                    partialView.setFilled();
+                }
+
+                if (ratingViewId == rating) {
+                    Animation scaleUp = AnimationUtils.loadAnimation(getContext(), R.anim.scale_up);
+                    Animation scaleDown = AnimationUtils.loadAnimation(getContext(), R.anim.scale_down);
+                    partialView.startAnimation(scaleUp);
+                    partialView.startAnimation(scaleDown);
+                }
+            }
+        };
     }
 }
 

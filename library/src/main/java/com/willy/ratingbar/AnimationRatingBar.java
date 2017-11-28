@@ -12,8 +12,8 @@ import android.util.AttributeSet;
 public class AnimationRatingBar extends BaseRatingBar {
 
     protected Handler mHandler;
-    protected boolean mStopFillingFlag = false;
-    protected int mDelay = 0;
+    protected Runnable mRunnable;
+    protected String mRunnableToken = "AnimationRatingBar";
 
     protected AnimationRatingBar(Context context) {
         super(context);
@@ -33,5 +33,6 @@ public class AnimationRatingBar extends BaseRatingBar {
     private void init() {
         mHandler = new Handler();
     }
+
 }
 
