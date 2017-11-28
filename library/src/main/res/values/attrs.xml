@@ -7,7 +7,9 @@
         <attr name="starPadding" format="dimension" />
         <attr name="drawableEmpty" format="reference" />
         <attr name="drawableFilled" format="reference" />
-        <attr name="touchable" format="boolean" />
+        <attr name="isIndicator" format="boolean" />
+        <attr name="scrollable" format="boolean" />
+        <attr name="clickable" format="boolean" />
         <attr name="clearRatingEnabled" format="boolean" />
         <attr name="starWidth" format="dimension" />
         <attr name="starHeight" format="dimension" />
