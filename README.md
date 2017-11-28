@@ -16,14 +16,12 @@ Current we already have three RatingBars :
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.3.3)
-- Implement SavedState to restore RatingBar state. (contributed by [harshsharma94](https://github.com/harshsharma94))
-- Fix fillRatingBar method bug when RatingBar use in RecyclerView.
-- Allow half star through click event. (contributed by [ANPez](https://github.com/ANPez))
-- Load drawables from XML using ContextCompat to allow vectordrawables. (contributed by [ANPez](https://github.com/ANPez))
-- Implement new EntryActivity in demo project
+## What's New (v1.3.4)
+- Fix AnimationRatingBar out of sync bug.
+- Implement IsIndicator, Scrollable and Clickable settings.
 
 ## Feature
+- Allow half star through click event. (contributed by [ANPez](https://github.com/ANPez))
 - Support step size setting(range from 0.1 to 1.0).
 - Support float rating  
   Now you can set a float rating like 3.5, 2.3, 4.7, etc., but you only need to provide two images: `filled` and `empty`, and Library will auto processes your images to support float showing!
@@ -50,7 +48,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.3.3'
+    compile 'com.github.ome450901:SimpleRatingBar:1.3.4'
 }
 ```
 
@@ -68,7 +66,9 @@ dependencies {
         rb:starHeight="30dp"
         rb:starPadding="15dp"
         rb:stepSize="0.5"
-        rb:touchable="true"
+        rb:isIndicator="false"
+        rb:clickable="true"
+        rb:scrollable="true"
         rb:clearRatingEnabled="true"
         rb:drawableEmpty="@drawable/start_empty"
         rb:drawableFilled="@drawable/star_filled">
@@ -82,7 +82,9 @@ ratingBar.setNumStars(5);
 ratingBar.setRating(3);
 ratingBar.setStarPadding(10);
 ratingBar.setStepSize(0.5f);
-ratingbar.setTouchable(true);
+ratingbar.setIsIndicator(false);
+ratingbar.setClickable(true);
+ratingbar.setScrollable(true);
 ratingbar.setClearRatingEnabled(true);
 ratingBar.setEmptyDrawableRes(R.drawable.start_empty);
 ratingBar.setFilledDrawableRes(R.drawable.start_empty);
