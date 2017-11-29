@@ -77,7 +77,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         super(context, attrs, defStyleAttr);
 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RatingBarAttributes);
-        float rating = typedArray.getFloat(R.styleable.RatingBarAttributes_rating, mRating);
+        final float rating = typedArray.getFloat(R.styleable.RatingBarAttributes_rating, 0);
         mNumStars = typedArray.getInt(R.styleable.RatingBarAttributes_numStars, mNumStars);
         mPadding = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starPadding, mPadding);
         mStarWidth = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starWidth, 0);
@@ -96,9 +96,19 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mDecimalFormat = new DecimalFormat("#.##", symbols);
 
         verifyParamsValue();
-
         initRatingView();
-        setRating(rating);
+
+        addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                setRating(rating);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+
+            }
+        });
     }
 
     private void verifyParamsValue() {
