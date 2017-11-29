@@ -56,7 +56,7 @@ public class EntryActivity extends AppCompatActivity {
             super(fm);
             fragments = new ArrayList<>();
             fragments.add(new DemoFragment());
-//            fragments.add(new ListFragment());
+            fragments.add(new ListFragment());
         }
 
         @Override

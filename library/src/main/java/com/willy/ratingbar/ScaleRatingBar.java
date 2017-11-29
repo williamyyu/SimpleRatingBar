@@ -1,7 +1,6 @@
 package com.willy.ratingbar;
 
 import android.content.Context;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -64,9 +63,7 @@ public class ScaleRatingBar extends AnimationRatingBar {
             }
 
             mRunnable = getAnimationRunnable(rating, partialView, ratingViewId, maxIntOfRating);
-
-            long timeMillis = SystemClock.uptimeMillis() + ANIMATION_DELAY;
-            mHandler.postAtTime(mRunnable, mRunnableToken, timeMillis);
+            postRunnable(mRunnable, ANIMATION_DELAY);
         }
     }
 
