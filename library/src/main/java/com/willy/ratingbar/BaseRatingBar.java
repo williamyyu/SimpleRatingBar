@@ -34,7 +34,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private static final int MAX_CLICK_DISTANCE = 5;
     private static final int MAX_CLICK_DURATION = 200;
 
-    private final DecimalFormat mDecimalFormat;
+    private DecimalFormat mDecimalFormat;
 
     private int mNumStars;
     private int mPadding = 0;
@@ -76,29 +76,28 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     public BaseRatingBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RatingBarAttributes);
-        float rating = typedArray.getFloat(R.styleable.RatingBarAttributes_rating, mRating);
-        mNumStars = typedArray.getInt(R.styleable.RatingBarAttributes_numStars, mNumStars);
-        mPadding = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starPadding, mPadding);
-        mStarWidth = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starWidth, 0);
-        mStarHeight = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starHeight, 0);
-        mStepSize = typedArray.getFloat(R.styleable.RatingBarAttributes_stepSize, mStepSize);
-        mEmptyDrawable = typedArray.hasValue(R.styleable.RatingBarAttributes_drawableEmpty) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.RatingBarAttributes_drawableEmpty, View.NO_ID)) : null;
-        mFilledDrawable = typedArray.hasValue(R.styleable.RatingBarAttributes_drawableFilled) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.RatingBarAttributes_drawableFilled, View.NO_ID)) : null;
-        mIsIndicator = typedArray.getBoolean(R.styleable.RatingBarAttributes_isIndicator, mIsIndicator);
-        mIsScrollable = typedArray.getBoolean(R.styleable.RatingBarAttributes_scrollable, mIsScrollable);
-        mIsClickable = typedArray.getBoolean(R.styleable.RatingBarAttributes_clickable, mIsClickable);
-        mClearRatingEnabled = typedArray.getBoolean(R.styleable.RatingBarAttributes_clearRatingEnabled, mClearRatingEnabled);
-        typedArray.recycle();
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseRatingBar);
+        final float rating = typedArray.getFloat(R.styleable.BaseRatingBar_srb_rating, 0);
 
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator('.');
-        mDecimalFormat = new DecimalFormat("#.##", symbols);
-
+        initParamsValue(typedArray, context);
         verifyParamsValue();
-
         initRatingView();
         setRating(rating);
+    }
+
+    private void initParamsValue(TypedArray typedArray, Context context) {
+        mNumStars = typedArray.getInt(R.styleable.BaseRatingBar_srb_numStars, mNumStars);
+        mPadding = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starPadding, mPadding);
+        mStarWidth = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starWidth, 0);
+        mStarHeight = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starHeight, 0);
+        mStepSize = typedArray.getFloat(R.styleable.BaseRatingBar_srb_stepSize, mStepSize);
+        mEmptyDrawable = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableEmpty) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.BaseRatingBar_srb_drawableEmpty, View.NO_ID)) : null;
+        mFilledDrawable = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableFilled) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.BaseRatingBar_srb_drawableFilled, View.NO_ID)) : null;
+        mIsIndicator = typedArray.getBoolean(R.styleable.BaseRatingBar_srb_isIndicator, mIsIndicator);
+        mIsScrollable = typedArray.getBoolean(R.styleable.BaseRatingBar_srb_scrollable, mIsScrollable);
+        mIsClickable = typedArray.getBoolean(R.styleable.BaseRatingBar_srb_clickable, mIsClickable);
+        mClearRatingEnabled = typedArray.getBoolean(R.styleable.BaseRatingBar_srb_clearRatingEnabled, mClearRatingEnabled);
+        typedArray.recycle();
     }
 
     private void verifyParamsValue() {
@@ -142,7 +141,6 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     private PartialView getPartialView(final int ratingViewId, Drawable filledDrawable, Drawable emptyDrawable) {
         PartialView partialView = new PartialView(getContext());
-//        partialView.setId(ratingViewId);
         partialView.setTag(ratingViewId);
         partialView.setPadding(mPadding, mPadding, mPadding, mPadding);
         partialView.setFilledDrawable(filledDrawable);
@@ -329,9 +327,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     private float calculateRating(float eventX, PartialView partialView) {
-        float ratioOfView = Float.parseFloat(mDecimalFormat.format((eventX - partialView.getLeft()) / partialView.getWidth()));
+        DecimalFormat decimalFormat = getDecimalFormat();
+        float ratioOfView = Float.parseFloat(decimalFormat.format((eventX - partialView.getLeft()) / partialView.getWidth()));
         float steps = Math.round(ratioOfView / mStepSize) * mStepSize;
-        return Float.parseFloat(mDecimalFormat.format((int) partialView.getTag() - (1 - steps)));
+        return Float.parseFloat(decimalFormat.format((int) partialView.getTag() - (1 - steps)));
     }
 
     private void handleClickEvent(float eventX) {
@@ -408,6 +407,15 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     public void setStepSize(@FloatRange(from = 0.1, to = 1.0) float stepSize) {
         this.mStepSize = stepSize;
+    }
+
+    public DecimalFormat getDecimalFormat() {
+        if (mDecimalFormat == null) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator('.');
+            mDecimalFormat = new DecimalFormat("#.##", symbols);
+        }
+        return mDecimalFormat;
     }
 
     @Override
