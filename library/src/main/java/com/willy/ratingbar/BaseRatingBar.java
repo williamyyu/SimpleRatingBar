@@ -76,39 +76,27 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     public BaseRatingBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RatingBarAttributes);
-        final float rating = typedArray.getFloat(R.styleable.RatingBarAttributes_rating, 0);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BaseRatingBar);
+        final float rating = typedArray.getFloat(R.styleable.BaseRatingBar_srb_rating, 0);
 
         initParamsValue(typedArray, context);
         verifyParamsValue();
         initRatingView();
-
-        addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
-            @Override
-            public void onViewAttachedToWindow(View v) {
-                setRating(rating);
-            }
-
-            @Override
-            public void onViewDetachedFromWindow(View v) {
-
-            }
-        });
-
+        setRating(rating);
     }
 
     private void initParamsValue(TypedArray typedArray, Context context) {
-        mNumStars = typedArray.getInt(R.styleable.RatingBarAttributes_numStars, mNumStars);
-        mPadding = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starPadding, mPadding);
-        mStarWidth = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starWidth, 0);
-        mStarHeight = typedArray.getDimensionPixelSize(R.styleable.RatingBarAttributes_starHeight, 0);
-        mStepSize = typedArray.getFloat(R.styleable.RatingBarAttributes_stepSize, mStepSize);
-        mEmptyDrawable = typedArray.hasValue(R.styleable.RatingBarAttributes_drawableEmpty) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.RatingBarAttributes_drawableEmpty, View.NO_ID)) : null;
-        mFilledDrawable = typedArray.hasValue(R.styleable.RatingBarAttributes_drawableFilled) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.RatingBarAttributes_drawableFilled, View.NO_ID)) : null;
-        mIsIndicator = typedArray.getBoolean(R.styleable.RatingBarAttributes_isIndicator, mIsIndicator);
-        mIsScrollable = typedArray.getBoolean(R.styleable.RatingBarAttributes_scrollable, mIsScrollable);
-        mIsClickable = typedArray.getBoolean(R.styleable.RatingBarAttributes_clickable, mIsClickable);
-        mClearRatingEnabled = typedArray.getBoolean(R.styleable.RatingBarAttributes_clearRatingEnabled, mClearRatingEnabled);
+        mNumStars = typedArray.getInt(R.styleable.BaseRatingBar_srb_numStars, mNumStars);
+        mPadding = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starPadding, mPadding);
+        mStarWidth = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starWidth, 0);
+        mStarHeight = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starHeight, 0);
+        mStepSize = typedArray.getFloat(R.styleable.BaseRatingBar_srb_stepSize, mStepSize);
+        mEmptyDrawable = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableEmpty) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.BaseRatingBar_srb_drawableEmpty, View.NO_ID)) : null;
+        mFilledDrawable = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableFilled) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.BaseRatingBar_srb_drawableFilled, View.NO_ID)) : null;
+        mIsIndicator = typedArray.getBoolean(R.styleable.BaseRatingBar_srb_isIndicator, mIsIndicator);
+        mIsScrollable = typedArray.getBoolean(R.styleable.BaseRatingBar_srb_scrollable, mIsScrollable);
+        mIsClickable = typedArray.getBoolean(R.styleable.BaseRatingBar_srb_clickable, mIsClickable);
+        mClearRatingEnabled = typedArray.getBoolean(R.styleable.BaseRatingBar_srb_clearRatingEnabled, mClearRatingEnabled);
         typedArray.recycle();
     }
 
@@ -153,7 +141,6 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     private PartialView getPartialView(final int ratingViewId, Drawable filledDrawable, Drawable emptyDrawable) {
         PartialView partialView = new PartialView(getContext());
-//        partialView.setId(ratingViewId);
         partialView.setTag(ratingViewId);
         partialView.setPadding(mPadding, mPadding, mPadding, mPadding);
         partialView.setFilledDrawable(filledDrawable);

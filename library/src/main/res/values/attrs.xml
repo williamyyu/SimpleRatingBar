@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="RatingBarAttributes">
-        <attr name="numStars" format="integer" />
-        <attr name="rating" format="float" />
-        <attr name="starPadding" format="dimension" />
-        <attr name="drawableEmpty" format="reference" />
-        <attr name="drawableFilled" format="reference" />
-        <attr name="isIndicator" format="boolean" />
-        <attr name="scrollable" format="boolean" />
-        <attr name="clickable" format="boolean" />
-        <attr name="clearRatingEnabled" format="boolean" />
-        <attr name="starWidth" format="dimension" />
-        <attr name="starHeight" format="dimension" />
-        <attr name="stepSize" format="float" />
+    <declare-styleable name="BaseRatingBar">
+        <attr name="srb_numStars" format="integer" />
+        <attr name="srb_rating" format="float" />
+        <attr name="srb_starPadding" format="dimension" />
+        <attr name="srb_drawableEmpty" format="reference" />
+        <attr name="srb_drawableFilled" format="reference" />
+        <attr name="srb_isIndicator" format="boolean" />
+        <attr name="srb_scrollable" format="boolean" />
+        <attr name="srb_clickable" format="boolean" />
+        <attr name="srb_clearRatingEnabled" format="boolean" />
+        <attr name="srb_starWidth" format="dimension" />
+        <attr name="srb_starHeight" format="dimension" />
+        <attr name="srb_stepSize" format="float" />
     </declare-styleable>
 </resources>
