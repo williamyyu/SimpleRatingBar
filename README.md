@@ -16,9 +16,12 @@ Current we already have three RatingBars :
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.3.4)
-- Fix AnimationRatingBar out of sync bug.
+## What's New (v1.3.5)
+- Rename the attributes for more easily know all this library's attributes.  
+    (`app:rating="2"` change to `app:srb_rating="2"`)
 - Implement IsIndicator, Scrollable and Clickable settings.
+- Fix Handler null pointer bug.
+- Fix AnimationRatingBar out of sync bug.
 
 ## Feature
 - Allow half star through click event. (contributed by [ANPez](https://github.com/ANPez))
@@ -48,7 +51,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.3.4'
+    compile 'com.github.ome450901:SimpleRatingBar:1.3.5'
 }
 ```
 
@@ -56,22 +59,22 @@ dependencies {
 ### In Xml
 ```xml
 <com.willy.ratingbar.ScaleRatingBar
-        xmlns:rb="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/simpleRatingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        rb:numStars="3"
-        rb:rating="2"
-        rb:starWidth="30dp"
-        rb:starHeight="30dp"
-        rb:starPadding="15dp"
-        rb:stepSize="0.5"
-        rb:isIndicator="false"
-        rb:clickable="true"
-        rb:scrollable="true"
-        rb:clearRatingEnabled="true"
-        rb:drawableEmpty="@drawable/start_empty"
-        rb:drawableFilled="@drawable/star_filled">
+        app:srb_numStars="3"
+        app:srb_rating="2"
+        app:srb_starWidth="30dp"
+        app:srb_starHeight="30dp"
+        app:srb_starPadding="15dp"
+        app:srb_stepSize="0.5"
+        app:srb_isIndicator="false"
+        app:srb_clickable="true"
+        app:srb_scrollable="true"
+        app:srb_clearRatingEnabled="true"
+        app:srb_drawableEmpty="@drawable/start_empty"
+        app:srb_drawableFilled="@drawable/star_filled">
 </com.willy.ratingbar.ScaleRatingBar>
 ```
 
