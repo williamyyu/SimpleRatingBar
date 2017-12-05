@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import java.text.DecimalFormat;
@@ -37,7 +36,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private DecimalFormat mDecimalFormat;
 
     private int mNumStars;
-    private int mPadding = 0;
+    private int mPadding = 20;
     private int mStarWidth;
     private int mStarHeight;
     private float mRating = -1;
@@ -128,19 +127,16 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private void initRatingView() {
         mPartialViews = new ArrayList<>();
 
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                mStarWidth == 0 ? LayoutParams.WRAP_CONTENT : mStarWidth,
-                mStarHeight == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : mStarHeight);
-
         for (int i = 1; i <= mNumStars; i++) {
             PartialView partialView = getPartialView(i, mFilledDrawable, mEmptyDrawable);
+            addView(partialView);
+
             mPartialViews.add(partialView);
-            addView(partialView, params);
         }
     }
 
     private PartialView getPartialView(final int ratingViewId, Drawable filledDrawable, Drawable emptyDrawable) {
-        PartialView partialView = new PartialView(getContext());
+        PartialView partialView = new PartialView(getContext(), mStarWidth, mStarHeight);
         partialView.setTag(ratingViewId);
         partialView.setPadding(mPadding, mPadding, mPadding, mPadding);
         partialView.setFilledDrawable(filledDrawable);

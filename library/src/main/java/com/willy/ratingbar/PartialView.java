@@ -5,6 +5,7 @@ import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -12,13 +13,17 @@ import android.widget.RelativeLayout;
  * Created by willy on 2017/6/3.
  */
 
-public class PartialView extends RelativeLayout {
+class PartialView extends RelativeLayout {
 
     private ImageView mFilledView;
     private ImageView mEmptyView;
+    private int mStarWidth = 0;
+    private int mStarHeight = 0;
 
-    public PartialView(Context context) {
+    public PartialView(Context context, int starWidth, int startHeight) {
         super(context);
+        mStarWidth = starWidth;
+        mStarHeight = startHeight;
         init();
     }
 
@@ -33,12 +38,18 @@ public class PartialView extends RelativeLayout {
     }
 
     private void init() {
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                mStarWidth == 0 ? LayoutParams.WRAP_CONTENT : mStarWidth,
+                mStarHeight == 0 ? LayoutParams.WRAP_CONTENT : mStarHeight);
+
         mFilledView = new ImageView(getContext());
         mFilledView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        addView(mFilledView, params);
+
         mEmptyView = new ImageView(getContext());
         mEmptyView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        addView(mFilledView);
-        addView(mEmptyView);
+        addView(mEmptyView, params);
+
         setEmpty();
     }
 
