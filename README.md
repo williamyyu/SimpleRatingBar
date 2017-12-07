@@ -16,7 +16,8 @@ Current we already have three RatingBars :
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.3.5)
+## What's New (v1.3.6)
+- Fix Star disappear bug when setting starHeight, starWidth and starPadding.
 - Rename the attributes for more easily know all this library's attributes.  
     (`app:rating="2"` change to `app:srb_rating="2"`)
 - Implement IsIndicator, Scrollable and Clickable settings.
@@ -51,7 +52,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.3.5'
+    compile 'com.github.ome450901:SimpleRatingBar:1.3.6'
 }
 ```
 
