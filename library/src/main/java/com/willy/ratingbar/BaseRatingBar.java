@@ -39,6 +39,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private int mPadding = 20;
     private int mStarWidth;
     private int mStarHeight;
+    private float mMinimumStars = 0;
     private float mRating = -1;
     private float mStepSize = 1f;
     private float mPreviousRating = 0;
@@ -86,6 +87,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     private void initParamsValue(TypedArray typedArray, Context context) {
         mNumStars = typedArray.getInt(R.styleable.BaseRatingBar_srb_numStars, mNumStars);
+        mMinimumStars = getValidMinimumStars(typedArray.getFloat(R.styleable.BaseRatingBar_srb_minimumStars, mMinimumStars));
         mPadding = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starPadding, mPadding);
         mStarWidth = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starWidth, 0);
         mStarHeight = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starHeight, 0);
@@ -197,8 +199,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             rating = mNumStars;
         }
 
-        if (rating < 0) {
-            rating = 0;
+        if (rating < mMinimumStars) {
+            rating = mMinimumStars;
         }
 
         if (mRating == rating) {
@@ -305,8 +307,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     private void handleMoveEvent(float eventX) {
         for (PartialView partialView : mPartialViews) {
-            if (eventX < partialView.getWidth() / 10f) {
-                setRating(0);
+            if (eventX < partialView.getWidth() / 10f + (mMinimumStars * partialView.getWidth())) {
+                setRating(mMinimumStars);
                 return;
             }
 
@@ -338,7 +340,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             float rating = mStepSize == 1 ? (int) partialView.getTag() : calculateRating(eventX, partialView);
 
             if (mPreviousRating == rating && isClearRatingEnabled()) {
-                setRating(0);
+                setRating(mMinimumStars);
             } else {
                 setRating(rating);
             }
@@ -363,6 +365,25 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     public void setOnRatingChangeListener(OnRatingChangeListener onRatingChangeListener) {
         mOnRatingChangeListener = onRatingChangeListener;
+    }
+
+    public void setMinimumStars(@FloatRange(from = 0.0) float minimumStars) {
+        mMinimumStars = getValidMinimumStars(minimumStars);
+    }
+
+    private float getValidMinimumStars(float minimumStars) {
+        if (minimumStars < 0) {
+            minimumStars = 0;
+        }
+
+        if (minimumStars > mNumStars) {
+            minimumStars = mNumStars;
+        }
+
+        if (minimumStars % mStepSize != 0) {
+            minimumStars = mStepSize;
+        }
+        return minimumStars;
     }
 
     public boolean isIndicator() {
