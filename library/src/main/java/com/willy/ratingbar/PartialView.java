@@ -3,6 +3,7 @@ package com.willy.ratingbar;
 import android.content.Context;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.IntRange;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -20,10 +21,14 @@ class PartialView extends RelativeLayout {
     private int mStarWidth = 0;
     private int mStarHeight = 0;
 
-    public PartialView(Context context, int starWidth, int startHeight) {
+    public PartialView(Context context, int partialViewId, int starWidth, int startHeight, int padding) {
         super(context);
+
         mStarWidth = starWidth;
         mStarHeight = startHeight;
+
+        setTag(partialViewId);
+        setPadding(padding, padding, padding, padding);
         init();
     }
 
@@ -89,4 +94,21 @@ class PartialView extends RelativeLayout {
         mEmptyView.setImageLevel(10000);
     }
 
+    public void setStarWidth(@IntRange(from = 0) int starWidth) {
+        mStarWidth = starWidth;
+
+        ViewGroup.LayoutParams params = mFilledView.getLayoutParams();
+        params.width = mStarWidth;
+        mFilledView.setLayoutParams(params);
+        mEmptyView.setLayoutParams(params);
+    }
+
+    public void setStarHeight(@IntRange(from = 0) int starHeight) {
+        mStarHeight = starHeight;
+
+        ViewGroup.LayoutParams params = mFilledView.getLayoutParams();
+        params.height = mStarHeight;
+        mFilledView.setLayoutParams(params);
+        mEmptyView.setLayoutParams(params);
+    }
 }

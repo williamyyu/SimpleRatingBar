@@ -3,6 +3,7 @@
 
     <declare-styleable name="BaseRatingBar">
         <attr name="srb_numStars" format="integer" />
+        <attr name="srb_minimumStars" format="float" />
         <attr name="srb_rating" format="float" />
         <attr name="srb_starPadding" format="dimension" />
         <attr name="srb_drawableEmpty" format="reference" />
