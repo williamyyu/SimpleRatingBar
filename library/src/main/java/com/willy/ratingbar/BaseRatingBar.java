@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.FloatRange;
+import android.support.annotation.IntRange;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -384,6 +385,30 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             minimumStars = mStepSize;
         }
         return minimumStars;
+    }
+
+    // Unit is pixel
+    public void setStarWidth(@IntRange(from = 0) int starWidth) {
+        mStarWidth = starWidth;
+        for (PartialView partialView : mPartialViews) {
+            partialView.setStarWidth(starWidth);
+        }
+    }
+
+    public int getStarWidth() {
+        return mStarWidth;
+    }
+
+    // Unit is pixel
+    public void setStarHeight(@IntRange(from = 0) int starHeight) {
+        mStarHeight = starHeight;
+        for (PartialView partialView : mPartialViews) {
+            partialView.setStarHeight(starHeight);
+        }
+    }
+
+    public int getStarHeight() {
+        return mStarHeight;
     }
 
     public boolean isIndicator() {
