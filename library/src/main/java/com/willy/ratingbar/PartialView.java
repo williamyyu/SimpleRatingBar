@@ -5,7 +5,6 @@ import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.IntRange;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,10 +21,14 @@ class PartialView extends RelativeLayout {
     private int mStarWidth = 0;
     private int mStarHeight = 0;
 
-    public PartialView(Context context, int starWidth, int startHeight) {
+    public PartialView(Context context, int partialViewId, int starWidth, int startHeight, int padding) {
         super(context);
+
         mStarWidth = starWidth;
         mStarHeight = startHeight;
+
+        setTag(partialViewId);
+        setPadding(padding, padding, padding, padding);
         init();
     }
 
@@ -43,9 +46,6 @@ class PartialView extends RelativeLayout {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                 mStarWidth == 0 ? LayoutParams.WRAP_CONTENT : mStarWidth,
                 mStarHeight == 0 ? LayoutParams.WRAP_CONTENT : mStarHeight);
-
-        Log.e("test", "height:" + mStarHeight);
-        Log.e("test", "width:" + mStarWidth);
 
         mFilledView = new ImageView(getContext());
         mFilledView.setScaleType(ImageView.ScaleType.CENTER_CROP);

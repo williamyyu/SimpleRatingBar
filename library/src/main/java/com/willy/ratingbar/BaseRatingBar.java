@@ -14,8 +14,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +28,6 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     public static final String TAG = "SimpleRatingBar";
-
-    private static final int MAX_CLICK_DISTANCE = 5;
-    private static final int MAX_CLICK_DURATION = 200;
-
-    private DecimalFormat mDecimalFormat;
 
     private int mNumStars;
     private int mPadding = 20;
@@ -88,11 +81,11 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     private void initParamsValue(TypedArray typedArray, Context context) {
         mNumStars = typedArray.getInt(R.styleable.BaseRatingBar_srb_numStars, mNumStars);
-        mMinimumStars = getValidMinimumStars(typedArray.getFloat(R.styleable.BaseRatingBar_srb_minimumStars, mMinimumStars));
+        mStepSize = typedArray.getFloat(R.styleable.BaseRatingBar_srb_stepSize, mStepSize);
+        mMinimumStars = RatingBarUtils.getValidMinimumStars(typedArray.getFloat(R.styleable.BaseRatingBar_srb_minimumStars, mMinimumStars), mNumStars, mStepSize);
         mPadding = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starPadding, mPadding);
         mStarWidth = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starWidth, 0);
         mStarHeight = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starHeight, 0);
-        mStepSize = typedArray.getFloat(R.styleable.BaseRatingBar_srb_stepSize, mStepSize);
         mEmptyDrawable = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableEmpty) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.BaseRatingBar_srb_drawableEmpty, View.NO_ID)) : null;
         mFilledDrawable = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableFilled) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.BaseRatingBar_srb_drawableFilled, View.NO_ID)) : null;
         mIsIndicator = typedArray.getBoolean(R.styleable.BaseRatingBar_srb_isIndicator, mIsIndicator);
@@ -131,17 +124,16 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mPartialViews = new ArrayList<>();
 
         for (int i = 1; i <= mNumStars; i++) {
-            PartialView partialView = getPartialView(i, mFilledDrawable, mEmptyDrawable);
+            PartialView partialView = getPartialView(i, mStarWidth, mStarHeight, mPadding, mFilledDrawable, mEmptyDrawable);
             addView(partialView);
 
             mPartialViews.add(partialView);
         }
     }
 
-    private PartialView getPartialView(final int ratingViewId, Drawable filledDrawable, Drawable emptyDrawable) {
-        PartialView partialView = new PartialView(getContext(), mStarWidth, mStarHeight);
-        partialView.setTag(ratingViewId);
-        partialView.setPadding(mPadding, mPadding, mPadding, mPadding);
+    private PartialView getPartialView(final int partialViewId, int starWidth, int starHeight, int padding,
+                                       Drawable filledDrawable, Drawable emptyDrawable) {
+        PartialView partialView = new PartialView(getContext(), partialViewId, starWidth, starHeight, padding);
         partialView.setFilledDrawable(filledDrawable);
         partialView.setEmptyDrawable(emptyDrawable);
         return partialView;
@@ -223,6 +215,34 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     @Override
+    // Unit is pixel
+    public void setStarWidth(@IntRange(from = 0) int starWidth) {
+        mStarWidth = starWidth;
+        for (PartialView partialView : mPartialViews) {
+            partialView.setStarWidth(starWidth);
+        }
+    }
+
+    @Override
+    public int getStarWidth() {
+        return mStarWidth;
+    }
+
+    @Override
+    // Unit is pixel
+    public void setStarHeight(@IntRange(from = 0) int starHeight) {
+        mStarHeight = starHeight;
+        for (PartialView partialView : mPartialViews) {
+            partialView.setStarHeight(starHeight);
+        }
+    }
+
+    @Override
+    public int getStarHeight() {
+        return mStarHeight;
+    }
+
+    @Override
     public void setStarPadding(int ratingPadding) {
         if (ratingPadding < 0) {
             return;
@@ -269,6 +289,61 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     }
 
     @Override
+    public void setMinimumStars(@FloatRange(from = 0.0) float minimumStars) {
+        mMinimumStars = RatingBarUtils.getValidMinimumStars(minimumStars, mNumStars, mStepSize);
+    }
+
+    @Override
+    public boolean isIndicator() {
+        return mIsIndicator;
+    }
+
+    @Override
+    public void setIsIndicator(boolean indicator) {
+        mIsIndicator = indicator;
+    }
+
+    @Override
+    public boolean isScrollable() {
+        return mIsScrollable;
+    }
+
+    @Override
+    public void setScrollable(boolean scrollable) {
+        mIsScrollable = scrollable;
+    }
+
+    @Override
+    public boolean isClickable() {
+        return mIsClickable;
+    }
+
+    @Override
+    public void setClickable(boolean clickable) {
+        this.mIsClickable = clickable;
+    }
+
+    @Override
+    public void setClearRatingEnabled(boolean enabled) {
+        this.mClearRatingEnabled = enabled;
+    }
+
+    @Override
+    public boolean isClearRatingEnabled() {
+        return mClearRatingEnabled;
+    }
+
+    @Override
+    public float getStepSize() {
+        return mStepSize;
+    }
+
+    @Override
+    public void setStepSize(@FloatRange(from = 0.1, to = 1.0) float stepSize) {
+        this.mStepSize = stepSize;
+    }
+
+    @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         return true;
     }
@@ -295,7 +370,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 handleMoveEvent(eventX);
                 break;
             case MotionEvent.ACTION_UP:
-                if (!isClickEvent(mStartX, mStartY, event) || !isClickable()) {
+                if (!RatingBarUtils.isClickEvent(mStartX, mStartY, event) || !isClickable()) {
                     return false;
                 }
 
@@ -317,19 +392,12 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 continue;
             }
 
-            float rating = calculateRating(eventX, partialView);
+            float rating = RatingBarUtils.calculateRating(partialView, mStepSize, eventX);
 
             if (mRating != rating) {
                 setRating(rating);
             }
         }
-    }
-
-    private float calculateRating(float eventX, PartialView partialView) {
-        DecimalFormat decimalFormat = getDecimalFormat();
-        float ratioOfView = Float.parseFloat(decimalFormat.format((eventX - partialView.getLeft()) / partialView.getWidth()));
-        float steps = Math.round(ratioOfView / mStepSize) * mStepSize;
-        return Float.parseFloat(decimalFormat.format((int) partialView.getTag() - (1 - steps)));
     }
 
     private void handleClickEvent(float eventX) {
@@ -338,7 +406,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 continue;
             }
 
-            float rating = mStepSize == 1 ? (int) partialView.getTag() : calculateRating(eventX, partialView);
+            float rating = mStepSize == 1 ? (int) partialView.getTag() : RatingBarUtils.calculateRating(partialView, mStepSize, eventX);
 
             if (mPreviousRating == rating && isClearRatingEnabled()) {
                 setRating(mMinimumStars);
@@ -353,111 +421,8 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         return eventX > ratingView.getLeft() && eventX < ratingView.getRight();
     }
 
-    private boolean isClickEvent(float startX, float startY, MotionEvent event) {
-        float duration = event.getEventTime() - event.getDownTime();
-        if (duration > MAX_CLICK_DURATION) {
-            return false;
-        }
-
-        float differenceX = Math.abs(startX - event.getX());
-        float differenceY = Math.abs(startY - event.getY());
-        return !(differenceX > MAX_CLICK_DISTANCE || differenceY > MAX_CLICK_DISTANCE);
-    }
-
     public void setOnRatingChangeListener(OnRatingChangeListener onRatingChangeListener) {
         mOnRatingChangeListener = onRatingChangeListener;
-    }
-
-    public void setMinimumStars(@FloatRange(from = 0.0) float minimumStars) {
-        mMinimumStars = getValidMinimumStars(minimumStars);
-    }
-
-    private float getValidMinimumStars(float minimumStars) {
-        if (minimumStars < 0) {
-            minimumStars = 0;
-        }
-
-        if (minimumStars > mNumStars) {
-            minimumStars = mNumStars;
-        }
-
-        if (minimumStars % mStepSize != 0) {
-            minimumStars = mStepSize;
-        }
-        return minimumStars;
-    }
-
-    // Unit is pixel
-    public void setStarWidth(@IntRange(from = 0) int starWidth) {
-        mStarWidth = starWidth;
-        for (PartialView partialView : mPartialViews) {
-            partialView.setStarWidth(starWidth);
-        }
-    }
-
-    public int getStarWidth() {
-        return mStarWidth;
-    }
-
-    // Unit is pixel
-    public void setStarHeight(@IntRange(from = 0) int starHeight) {
-        mStarHeight = starHeight;
-        for (PartialView partialView : mPartialViews) {
-            partialView.setStarHeight(starHeight);
-        }
-    }
-
-    public int getStarHeight() {
-        return mStarHeight;
-    }
-
-    public boolean isIndicator() {
-        return mIsIndicator;
-    }
-
-    public void setIsIndicator(boolean indicator) {
-        mIsIndicator = indicator;
-    }
-
-    public boolean isScrollable() {
-        return mIsScrollable;
-    }
-
-    public void setScrollable(boolean scrollable) {
-        mIsScrollable = scrollable;
-    }
-
-    public boolean isClickable() {
-        return mIsClickable;
-    }
-
-    public void setClickable(boolean clickable) {
-        this.mIsClickable = clickable;
-    }
-
-    public void setClearRatingEnabled(boolean enabled) {
-        this.mClearRatingEnabled = enabled;
-    }
-
-    public boolean isClearRatingEnabled() {
-        return mClearRatingEnabled;
-    }
-
-    public float getStepSize() {
-        return mStepSize;
-    }
-
-    public void setStepSize(@FloatRange(from = 0.1, to = 1.0) float stepSize) {
-        this.mStepSize = stepSize;
-    }
-
-    public DecimalFormat getDecimalFormat() {
-        if (mDecimalFormat == null) {
-            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-            symbols.setDecimalSeparator('.');
-            mDecimalFormat = new DecimalFormat("#.##", symbols);
-        }
-        return mDecimalFormat;
     }
 
     @Override
