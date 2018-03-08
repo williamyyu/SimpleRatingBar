@@ -16,7 +16,9 @@ Current we already have three RatingBars :
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.3.6)
+## What's New (v1.4.0)
+- Implement minimum stars property
+- Add setStarWidth and setStarHeight API (unit is pixel)
 - Fix Star disappear bug when setting starHeight, starWidth and starPadding.
 - Rename the attributes for more easily know all this library's attributes.  
     (`app:rating="2"` change to `app:srb_rating="2"`)
@@ -28,14 +30,13 @@ Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com
 - Allow half star through click event. (contributed by [ANPez](https://github.com/ANPez))
 - Support step size setting(range from 0.1 to 1.0).
 - Support float rating  
-  Now you can set a float rating like 3.5, 2.3, 4.7, etc., but you only need to provide two images: `filled` and `empty`, and Library will auto processes your images to support float showing!
-- Add touchable setting
-- Add ClearRatingEnabled setting
+    - Now you can set a float rating like 3.5, 2.3, 4.7, etc., but you only need to provide two images: `filled` and `empty`, and Library will auto processes your images to support float showing!
 - Stars width and height setting. (contributed by [zhangruize](https://github.com/zhangruize))  
 - Support use touch to change rating
 - Custom drawable's padding
 - Custom your empty and filled drawable
 - Click again to clear rating
+- IsIndicator, Scrollable, Touchable and Clickable settings
 - Rotate animation
 - Scale animation
 
@@ -52,7 +53,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.3.6'
+    compile 'com.github.ome450901:SimpleRatingBar:1.4.0'
 }
 ```
 
@@ -86,6 +87,8 @@ ratingBar.setNumStars(5);
 ratingBar.setRating(3);
 ratingBar.setStarPadding(10);
 ratingBar.setStepSize(0.5f);
+ratingBar.setWidth(105);
+ratingBar.setHeight(105);
 ratingbar.setIsIndicator(false);
 ratingbar.setClickable(true);
 ratingbar.setScrollable(true);
@@ -101,7 +104,7 @@ ratingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
 ```
 
 ## Want to Implement Your Own Animation?
-#### Only 2 Steps you need to do:
+#### Only TWO STEPS you need to do:
 - Create a class that extend `BaseRatingBar`
 - Override the `emptyRatingBar` and `fillRatingBar` this two method, and then you can start implement your own animaion!
 
@@ -118,7 +121,7 @@ Follow me at [Medium](https://medium.com/@ome450901).
 ```
 MIT License
 
-Copyright (c) 2017 WillyYu
+Copyright (c) 2018 WillyYu
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
