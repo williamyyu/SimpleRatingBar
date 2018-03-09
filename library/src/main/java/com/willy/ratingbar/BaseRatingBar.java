@@ -82,7 +82,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private void initParamsValue(TypedArray typedArray, Context context) {
         mNumStars = typedArray.getInt(R.styleable.BaseRatingBar_srb_numStars, mNumStars);
         mStepSize = typedArray.getFloat(R.styleable.BaseRatingBar_srb_stepSize, mStepSize);
-        mMinimumStars = RatingBarUtils.getValidMinimumStars(typedArray.getFloat(R.styleable.BaseRatingBar_srb_minimumStars, mMinimumStars), mNumStars, mStepSize);
+        mMinimumStars = typedArray.getFloat(R.styleable.BaseRatingBar_srb_minimumStars, mMinimumStars);
         mPadding = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starPadding, mPadding);
         mStarWidth = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starWidth, 0);
         mStarHeight = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starHeight, 0);
@@ -118,6 +118,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             mStepSize = 0.1f;
         }
 
+        mMinimumStars = RatingBarUtils.getValidMinimumStars(mMinimumStars, mNumStars, mStepSize);
     }
 
     private void initRatingView() {
