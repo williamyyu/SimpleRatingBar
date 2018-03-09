@@ -16,15 +16,10 @@ Current we already have three RatingBars :
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.4.0)
+## What's New (v1.4.1)
+- Fix minimum stars not working in recyclerView bug
 - Implement minimum stars property
 - Add setStarWidth and setStarHeight API (unit is pixel)
-- Fix Star disappear bug when setting starHeight, starWidth and starPadding.
-- Rename the attributes for more easily know all this library's attributes.  
-    (`app:rating="2"` change to `app:srb_rating="2"`)
-- Implement IsIndicator, Scrollable and Clickable settings.
-- Fix Handler null pointer bug.
-- Fix AnimationRatingBar out of sync bug.
 
 ## Feature
 - Allow half star through click event. (contributed by [ANPez](https://github.com/ANPez))
@@ -53,7 +48,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.4.0'
+    compile 'com.github.ome450901:SimpleRatingBar:1.4.1'
 }
 ```
 
@@ -66,6 +61,7 @@ dependencies {
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srb_numStars="3"
+        app:srb_minimumStars="1"
         app:srb_rating="2"
         app:srb_starWidth="30dp"
         app:srb_starHeight="30dp"
@@ -84,6 +80,7 @@ dependencies {
 ```java
 ScaleRatingBar ratingBar = new ScaleRatingBar(this);
 ratingBar.setNumStars(5);
+ratingBar.setMinimumStars(1);
 ratingBar.setRating(3);
 ratingBar.setStarPadding(10);
 ratingBar.setStepSize(0.5f);
