@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.willy.ratingbar.BaseRatingBar;
+import com.willy.ratingbar.BaseRatingBar.OnRatingDoneListener;
 import com.willy.ratingbar.RotationRatingBar;
 import com.willy.ratingbar.ScaleRatingBar;
 
@@ -37,18 +38,36 @@ public class DemoFragment extends Fragment {
                 Log.d(TAG, "BaseRatingBar onRatingChange: " + rating);
             }
         });
+        baseRatingBar.setOnRatingDoneListener(new OnRatingDoneListener() {
+            @Override
+            public void onRatingDone(float rating) {
+                Log.d(TAG, "BaseRatingBar onRatingDone: " + rating);
+            }
+        });
 
         scaleRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
             public void onRatingChange(BaseRatingBar ratingBar, float rating) {
-                Log.d(TAG, "ScaleRatingBar onRatingChange: " + rating);
+                Log.d(TAG, "BaseRatingBar onRatingChange: " + rating);
+            }
+        });
+        scaleRatingBar.setOnRatingDoneListener(new OnRatingDoneListener() {
+            @Override
+            public void onRatingDone(float rating) {
+                Log.d(TAG, "BaseRatingBar onRatingDone: " + rating);
             }
         });
 
         rotationRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
             public void onRatingChange(BaseRatingBar ratingBar, float rating) {
-                Log.d(TAG, "RotationRatingBar onRatingChange: " + rating);
+                Log.d(TAG, "BaseRatingBar onRatingChange: " + rating);
+            }
+        });
+        rotationRatingBar.setOnRatingDoneListener(new OnRatingDoneListener() {
+            @Override
+            public void onRatingDone(float rating) {
+                Log.d(TAG, "BaseRatingBar onRatingDone: " + rating);
             }
         });
 

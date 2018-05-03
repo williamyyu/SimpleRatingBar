@@ -27,6 +27,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         void onRatingChange(BaseRatingBar ratingBar, float rating);
     }
 
+    public interface OnRatingDoneListener {
+        void onRatingDone(float mRating);
+    }
+
     public static final String TAG = "SimpleRatingBar";
 
     private int mNumStars;
@@ -50,6 +54,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private Drawable mFilledDrawable;
 
     private OnRatingChangeListener mOnRatingChangeListener;
+    private OnRatingDoneListener mOnRatingDoneListener;
 
     protected List<PartialView> mPartialViews;
 
@@ -362,6 +367,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 mStartX = eventX;
                 mStartY = eventY;
                 mPreviousRating = mRating;
+                handleClickEvent(eventX);
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (!isScrollable()) {
@@ -371,6 +377,9 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
                 handleMoveEvent(eventX);
                 break;
             case MotionEvent.ACTION_UP:
+                if (mOnRatingDoneListener != null && isClickable()) {
+                    mOnRatingDoneListener.onRatingDone(mRating);
+                }
                 if (!RatingBarUtils.isClickEvent(mStartX, mStartY, event) || !isClickable()) {
                     return false;
                 }
@@ -424,6 +433,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     public void setOnRatingChangeListener(OnRatingChangeListener onRatingChangeListener) {
         mOnRatingChangeListener = onRatingChangeListener;
+    }
+
+    public void setOnRatingDoneListener(OnRatingDoneListener onRatingDoneListener) {
+        mOnRatingDoneListener = onRatingDoneListener;
     }
 
     @Override
