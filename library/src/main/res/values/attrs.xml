@@ -7,7 +7,11 @@
         <attr name="srb_rating" format="float" />
         <attr name="srb_starPadding" format="dimension" />
         <attr name="srb_drawableEmpty" format="reference" />
+        <attr name="srb_drawableEmptyFirst" format="reference" />
+        <attr name="srb_drawableEmptyLast" format="reference" />
         <attr name="srb_drawableFilled" format="reference" />
+        <attr name="srb_drawableFilledFirst" format="reference" />
+        <attr name="srb_drawableFilledLast" format="reference" />
         <attr name="srb_isIndicator" format="boolean" />
         <attr name="srb_scrollable" format="boolean" />
         <attr name="srb_clickable" format="boolean" />

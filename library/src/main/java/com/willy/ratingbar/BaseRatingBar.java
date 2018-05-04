@@ -51,7 +51,11 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private float mStartY;
 
     private Drawable mEmptyDrawable;
+    private Drawable mEmptyDrawableFirst;
+    private Drawable mEmptyDrawableLast;
     private Drawable mFilledDrawable;
+    private Drawable mFilledDrawableFirst;
+    private Drawable mFilledDrawableLast;
 
     private OnRatingChangeListener mOnRatingChangeListener;
     private OnRatingDoneListener mOnRatingDoneListener;
@@ -92,7 +96,11 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mStarWidth = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starWidth, 0);
         mStarHeight = typedArray.getDimensionPixelSize(R.styleable.BaseRatingBar_srb_starHeight, 0);
         mEmptyDrawable = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableEmpty) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.BaseRatingBar_srb_drawableEmpty, View.NO_ID)) : null;
+        mEmptyDrawableFirst = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableEmptyFirst) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.BaseRatingBar_srb_drawableEmptyFirst, View.NO_ID)) : null;
+        mEmptyDrawableLast = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableEmptyLast) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.BaseRatingBar_srb_drawableEmptyLast, View.NO_ID)) : null;
         mFilledDrawable = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableFilled) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.BaseRatingBar_srb_drawableFilled, View.NO_ID)) : null;
+        mFilledDrawableFirst = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableFilledFirst) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.BaseRatingBar_srb_drawableFilledFirst, View.NO_ID)) : null;
+        mFilledDrawableLast = typedArray.hasValue(R.styleable.BaseRatingBar_srb_drawableFilledLast) ? ContextCompat.getDrawable(context, typedArray.getResourceId(R.styleable.BaseRatingBar_srb_drawableFilledLast, View.NO_ID)) : null;
         mIsIndicator = typedArray.getBoolean(R.styleable.BaseRatingBar_srb_isIndicator, mIsIndicator);
         mIsScrollable = typedArray.getBoolean(R.styleable.BaseRatingBar_srb_scrollable, mIsScrollable);
         mIsClickable = typedArray.getBoolean(R.styleable.BaseRatingBar_srb_clickable, mIsClickable);
@@ -113,8 +121,24 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             mEmptyDrawable = ContextCompat.getDrawable(getContext(), R.drawable.empty);
         }
 
+        if (mEmptyDrawableFirst == null) {
+            mEmptyDrawableFirst = mEmptyDrawable;
+        }
+
+        if (mEmptyDrawableLast == null) {
+            mEmptyDrawableLast = mEmptyDrawable;
+        }
+
         if (mFilledDrawable == null) {
             mFilledDrawable = ContextCompat.getDrawable(getContext(), R.drawable.filled);
+        }
+
+        if (mFilledDrawableFirst == null) {
+            mFilledDrawableFirst = mFilledDrawable;
+        }
+
+        if (mFilledDrawableLast == null) {
+            mFilledDrawableLast = mFilledDrawable;
         }
 
         if (mStepSize > 1.0f) {
@@ -129,11 +153,24 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private void initRatingView() {
         mPartialViews = new ArrayList<>();
 
-        for (int i = 1; i <= mNumStars; i++) {
+        // Add first partial view
+        PartialView firstPartialView = getPartialView(1, mStarWidth, mStarHeight, mPadding, mFilledDrawableFirst, mEmptyDrawableFirst);
+        addView(firstPartialView);
+        mPartialViews.add(firstPartialView);
+
+        // Add normal partial views
+        for (int i = 2; i < mNumStars; i++) {
             PartialView partialView = getPartialView(i, mStarWidth, mStarHeight, mPadding, mFilledDrawable, mEmptyDrawable);
             addView(partialView);
 
             mPartialViews.add(partialView);
+        }
+
+        // Add last partial view
+        if (mNumStars > 1) {
+            PartialView lastPartialView = getPartialView(mNumStars, mStarWidth, mStarHeight, mPadding, mFilledDrawableLast, mEmptyDrawableLast);
+            addView(lastPartialView);
+            mPartialViews.add(lastPartialView);
         }
     }
 
