@@ -62,8 +62,22 @@ public class ScaleRatingBar extends AnimationRatingBar {
                 continue;
             }
 
+          if (isInEditMode())
+          {
+            if (ratingViewId == maxIntOfRating)
+            {
+              partialView.setPartialFilled(rating);
+            }
+            else
+            {
+              partialView.setFilled();
+            }
+          }
+          else
+          {
             mRunnable = getAnimationRunnable(rating, partialView, ratingViewId, maxIntOfRating);
             postRunnable(mRunnable, ANIMATION_DELAY);
+          }
         }
     }
 
