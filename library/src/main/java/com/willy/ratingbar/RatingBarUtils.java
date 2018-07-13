@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 /**
  * Created by willy on 2018/3/8.
@@ -50,7 +51,7 @@ class RatingBarUtils {
 
     static DecimalFormat getDecimalFormat() {
         if (mDecimalFormat == null) {
-            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ENGLISH);
             symbols.setDecimalSeparator('.');
             mDecimalFormat = new DecimalFormat("#.##", symbols);
         }

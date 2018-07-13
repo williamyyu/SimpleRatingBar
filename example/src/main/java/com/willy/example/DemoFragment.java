@@ -30,7 +30,7 @@ public class DemoFragment extends Fragment {
         final BaseRatingBar baseRatingBar = (BaseRatingBar) view.findViewById(R.id.baseratingbar_main);
         final ScaleRatingBar scaleRatingBar = (ScaleRatingBar) view.findViewById(R.id.scaleRatingBar);
         final RotationRatingBar rotationRatingBar = (RotationRatingBar) view.findViewById(R.id.rotationratingbar_main);
-
+        baseRatingBar.setClearRatingEnabled(false);
         baseRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
             public void onRatingChange(BaseRatingBar ratingBar, float rating) {
