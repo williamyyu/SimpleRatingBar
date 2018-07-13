@@ -16,7 +16,8 @@ Current we already have three RatingBars :
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.4.1)
+## What's New (v1.4.2)
+- Fix bug when the format of number is different in different country
 - Fix minimum stars not working in recyclerView bug
 - Implement minimum stars property
 - Add setStarWidth and setStarHeight API (unit is pixel)
@@ -48,7 +49,7 @@ allprojects {
 }
 
 dependencies {
-    compile 'com.github.ome450901:SimpleRatingBar:1.4.1'
+    compile 'com.github.ome450901:SimpleRatingBar:1.4.2'
 }
 ```
 
