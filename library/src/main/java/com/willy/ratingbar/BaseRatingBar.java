@@ -24,7 +24,7 @@ import java.util.List;
 public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     public interface OnRatingChangeListener {
-        void onRatingChange(BaseRatingBar ratingBar, float rating);
+        void onRatingChange(BaseRatingBar ratingBar, float rating, boolean fromUser);
     }
 
     public static final String TAG = "SimpleRatingBar";
@@ -189,6 +189,10 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     @Override
     public void setRating(float rating) {
+        setRating(rating, false);
+    }
+
+    private void setRating(float rating, boolean fromUser) {
         if (rating > mNumStars) {
             rating = mNumStars;
         }
@@ -204,7 +208,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
         mRating = rating;
 
         if (mOnRatingChangeListener != null) {
-            mOnRatingChangeListener.onRatingChange(this, mRating);
+            mOnRatingChangeListener.onRatingChange(this, mRating, fromUser);
         }
 
         fillRatingBar(rating);
@@ -385,7 +389,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
     private void handleMoveEvent(float eventX) {
         for (PartialView partialView : mPartialViews) {
             if (eventX < partialView.getWidth() / 10f + (mMinimumStars * partialView.getWidth())) {
-                setRating(mMinimumStars);
+                setRating(mMinimumStars, true);
                 return;
             }
 
@@ -396,7 +400,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             float rating = RatingBarUtils.calculateRating(partialView, mStepSize, eventX);
 
             if (mRating != rating) {
-                setRating(rating);
+                setRating(rating, true);
             }
         }
     }
@@ -410,9 +414,9 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             float rating = mStepSize == 1 ? (int) partialView.getTag() : RatingBarUtils.calculateRating(partialView, mStepSize, eventX);
 
             if (mPreviousRating == rating && isClearRatingEnabled()) {
-                setRating(mMinimumStars);
+                setRating(mMinimumStars, true);
             } else {
-                setRating(rating);
+                setRating(rating, true);
             }
             break;
         }

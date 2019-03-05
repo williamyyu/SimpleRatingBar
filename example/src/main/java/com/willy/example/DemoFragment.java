@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
+import android.widget.RatingBar.OnRatingBarChangeListener;
 
 import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.RotationRatingBar;
@@ -33,21 +35,21 @@ public class DemoFragment extends Fragment {
         baseRatingBar.setClearRatingEnabled(false);
         baseRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
-            public void onRatingChange(BaseRatingBar ratingBar, float rating) {
+            public void onRatingChange(BaseRatingBar ratingBar, float rating, boolean fromUser) {
                 Log.d(TAG, "BaseRatingBar onRatingChange: " + rating);
             }
         });
 
         scaleRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
-            public void onRatingChange(BaseRatingBar ratingBar, float rating) {
+            public void onRatingChange(BaseRatingBar ratingBar, float rating, boolean fromUser) {
                 Log.d(TAG, "ScaleRatingBar onRatingChange: " + rating);
             }
         });
 
         rotationRatingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
-            public void onRatingChange(BaseRatingBar ratingBar, float rating) {
+            public void onRatingChange(BaseRatingBar ratingBar, float rating, boolean fromUser) {
                 Log.d(TAG, "RotationRatingBar onRatingChange: " + rating);
             }
         });
