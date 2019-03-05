@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.willy.ratingbar.BaseRatingBar;
+import com.willy.ratingbar.BaseRatingBar.OnRatingChangeListener;
 import com.willy.ratingbar.ScaleRatingBar;
 
 import java.util.ArrayList;
@@ -18,14 +20,14 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<Integer> list;
+    private List<Float> list;
 
     public MyAdapter(Context context) {
         mContext = context;
         list = new ArrayList<>();
 
         for (int i = 1; i < 20; i++) {
-            list.add(i % 6);
+            list.add(i % 6f);
         }
     }
 
@@ -37,6 +39,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
+        holder.ratingBar.setTag(position);
         holder.ratingBar.setRating(list.get(position));
     }
 
@@ -54,6 +57,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 //            ratingBar = (BaseRatingBar) itemView.findViewById(R.id.ratingBar);
 //            ratingBar = (ScaleRatingBar) itemView.findViewById(R.id.ratingBar);
             ratingBar = (ScaleRatingBar) itemView.findViewById(R.id.ratingBar);
+            ratingBar.setOnRatingChangeListener(new OnRatingChangeListener() {
+                @Override
+                public void onRatingChange(BaseRatingBar ratingBar, float rating, boolean fromUser) {
+                    int position = (int) ratingBar.getTag();
+                    list.set(position, rating);
+                }
+            });
         }
     }
 }
