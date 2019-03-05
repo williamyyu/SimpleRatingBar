@@ -7,6 +7,7 @@ import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -267,27 +268,32 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
 
     @Override
     public void setEmptyDrawableRes(@DrawableRes int res) {
-        setEmptyDrawable(ContextCompat.getDrawable(getContext(), res));
+        Drawable drawable = ContextCompat.getDrawable(getContext(), res);
+        if (drawable != null) {
+            setEmptyDrawable(drawable);
+        }
     }
 
     @Override
     public void setFilledDrawableRes(@DrawableRes int res) {
-        setFilledDrawable(ContextCompat.getDrawable(getContext(), res));
+        Drawable drawable = ContextCompat.getDrawable(getContext(), res);
+
+        if (drawable != null) {
+            setFilledDrawable(drawable);
+        }
     }
 
     @Override
-    public void setEmptyDrawable(Drawable drawable) {
+    public void setEmptyDrawable(@NonNull Drawable drawable) {
         mEmptyDrawable = drawable;
-
         for (PartialView partialView : mPartialViews) {
             partialView.setEmptyDrawable(drawable);
         }
     }
 
     @Override
-    public void setFilledDrawable(Drawable drawable) {
+    public void setFilledDrawable(@NonNull Drawable drawable) {
         mFilledDrawable = drawable;
-
         for (PartialView partialView : mPartialViews) {
             partialView.setFilledDrawable(drawable);
         }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ class PartialView extends RelativeLayout {
         setEmpty();
     }
 
-    public void setFilledDrawable(Drawable drawable) {
+    public void setFilledDrawable(@NonNull Drawable drawable) {
         if (drawable.getConstantState() == null) {
             return;
         }
@@ -67,7 +68,7 @@ class PartialView extends RelativeLayout {
         mFilledView.setImageDrawable(clipDrawable);
     }
 
-    public void setEmptyDrawable(Drawable drawable) {
+    public void setEmptyDrawable(@NonNull Drawable drawable) {
         if (drawable.getConstantState() == null) {
             return;
         }
