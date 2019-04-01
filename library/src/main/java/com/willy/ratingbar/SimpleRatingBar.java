@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.FloatRange;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 
 /**
  * Created by willy on 2017/5/10.
@@ -30,11 +31,11 @@ interface SimpleRatingBar {
 
     int getStarPadding();
 
-    void setEmptyDrawable(Drawable drawable);
+    void setEmptyDrawable(@NonNull Drawable drawable);
 
     void setEmptyDrawableRes(@DrawableRes int res);
 
-    void setFilledDrawable(Drawable drawable);
+    void setFilledDrawable(@NonNull Drawable drawable);
 
     void setFilledDrawableRes(@DrawableRes int res);
 
