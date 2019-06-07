@@ -16,8 +16,8 @@ Current we already have three RatingBars :
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.4.3)
-- Add `fromUser` parameter in `onRatingChange`
+## What's New (v1.5.0)
+- AndroidX libraries are now used
 
 ## Feature
 - Allow half star through click event. (contributed by [ANPez](https://github.com/ANPez))
