@@ -3,26 +3,30 @@ package com.willy.ratingbar;
 import android.content.Context;
 import android.graphics.drawable.ClipDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
 
 /**
  * Created by willy on 2017/6/3.
  */
 
-class PartialView extends RelativeLayout {
+class PartialView
+        extends RelativeLayout {
 
     private ImageView mFilledView;
     private ImageView mEmptyView;
     private int mStarWidth = 0;
     private int mStarHeight = 0;
 
-    public PartialView(Context context, int partialViewId, int starWidth, int startHeight, int padding) {
+    public PartialView(Context context, int partialViewId, int starWidth, int startHeight,
+                       int padding) {
         super(context);
 
         mStarWidth = starWidth;
@@ -44,9 +48,16 @@ class PartialView extends RelativeLayout {
     }
 
     private void init() {
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+        // Make PartialViews use the space when the RatingBar has more width (e.g. match_parent)
+        setLayoutParams(new LinearLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
+                1f));
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 mStarWidth == 0 ? LayoutParams.WRAP_CONTENT : mStarWidth,
                 mStarHeight == 0 ? LayoutParams.WRAP_CONTENT : mStarHeight);
+        params.addRule(CENTER_IN_PARENT);
 
         mFilledView = new ImageView(getContext());
         mFilledView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -64,7 +75,9 @@ class PartialView extends RelativeLayout {
             return;
         }
 
-        ClipDrawable clipDrawable = new ClipDrawable(drawable.getConstantState().newDrawable(), Gravity.START, ClipDrawable.HORIZONTAL);
+        ClipDrawable clipDrawable =
+                new ClipDrawable(drawable.getConstantState().newDrawable(), Gravity.START,
+                                 ClipDrawable.HORIZONTAL);
         mFilledView.setImageDrawable(clipDrawable);
     }
 
@@ -73,7 +86,9 @@ class PartialView extends RelativeLayout {
             return;
         }
 
-        ClipDrawable clipDrawable = new ClipDrawable(drawable.getConstantState().newDrawable(), Gravity.END, ClipDrawable.HORIZONTAL);
+        ClipDrawable clipDrawable =
+                new ClipDrawable(drawable.getConstantState().newDrawable(), Gravity.END,
+                                 ClipDrawable.HORIZONTAL);
         mEmptyView.setImageDrawable(clipDrawable);
     }
 
