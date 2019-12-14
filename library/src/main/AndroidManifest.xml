@@ -1,11 +1,8 @@
-<manifest package="com.willy.ratingbar"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
-          xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+    package="com.willy.ratingbar">
 
-    <application
-        android:label="@string/app_name"
-        >
+    <application android:label="@string/app_name">
 
     </application>
 
