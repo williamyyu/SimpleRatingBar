@@ -54,9 +54,10 @@ class PartialView
                 LayoutParams.WRAP_CONTENT,
                 1f));
 
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 mStarWidth == 0 ? LayoutParams.WRAP_CONTENT : mStarWidth,
                 mStarHeight == 0 ? LayoutParams.WRAP_CONTENT : mStarHeight);
+        params.addRule(CENTER_IN_PARENT);
 
         mFilledView = new ImageView(getContext());
         mFilledView.setScaleType(ImageView.ScaleType.CENTER_CROP);
