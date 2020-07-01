@@ -206,7 +206,11 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             return;
         }
 
-        mRating = rating;
+        // Respect Step size. So if the defined step size is 0.5, and we're attributing it a 4.7 rating,
+        // it should actually be set to `4.5` rating.
+        float stepAbidingRating = Double.valueOf(Math.floor(rating/mStepSize)).floatValue() * mStepSize;
+
+        mRating = stepAbidingRating;
 
         if (mOnRatingChangeListener != null) {
             mOnRatingChangeListener.onRatingChange(this, mRating, fromUser);
