@@ -20,7 +20,8 @@ Provide three RatingBars at the moment:
 ![](images/screenshot.png)  
 Icon made by [Freepik](http://www.freepik.com/) from www.flaticon.com 
 
-## What's New (v1.5.0)
+## What's New (v1.5.1)
+- Fixed stepSize bug (#91)
 - Fixed the match parent issue(start didn't consume the whole width)
 
 ## Feature

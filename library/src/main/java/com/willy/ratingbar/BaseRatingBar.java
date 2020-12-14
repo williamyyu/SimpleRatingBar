@@ -4,16 +4,17 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.LinearLayout;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.FloatRange;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -216,7 +217,7 @@ public class BaseRatingBar extends LinearLayout implements SimpleRatingBar {
             mOnRatingChangeListener.onRatingChange(this, mRating, fromUser);
         }
 
-        fillRatingBar(rating);
+        fillRatingBar(mRating);
     }
 
     @Override
